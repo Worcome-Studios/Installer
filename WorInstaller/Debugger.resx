@@ -117,47 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Banner" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Banner.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Estandarte" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Estandarte.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="LogoWorInstaller" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\LogoWorInstaller.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="UserAgreement" xml:space="preserve">
-    <value>End-User license agreement for AppName
-
-"Software" refers to AppName and all files belonging to the program, including documentation.
-
-1. Software installation and use
-You may install, use, access, run, or otherwise interact with ("Run") one copy of the SOFTWARE on a single or multiple computers. The SOFTWARE may be installed, accessed, displayed, run, shared or used concurrently on or from different computers. These rights are applicable for personal and commercial use of the SOFTWARE.
-
-2. No consequential or other damages
-To the maximum extent permitted by applicable law, the author shall not be liable for any other damages whatsoever (including, without limitation, damages for loss of business profits, business interruption, loss of business information, or other pecuniary loss) arising out of the use of or inability to use the SOFTWARE) even if the author has been advised of the possibility of such damages. To the extent that you could have avoided damages by taking reasonable care, including by backing up your software and other files, the author and its suppliers will not be liable for such damages.
-
-3. Reverse engineering, decompilation and disassembly
-You may not reverse engineer, decompile, or disassemble the SOFTWARE.
-
-4. Copyright
-All title and intellectual property rights in and to the SOFTWARE  are owned by the author. 
-
-5. Separation of components
-The SOFTWARE is licensed as a single product and its component parts may not be separated.
-
-6. Your Privacy
-See http://worcomestudios.comule.com/PrivacyPolicy.html for more information.
-
-
-
-This EULA was last revised on August 5, 2020.</value>
-  </data>
-  <data name="WorInstallerCarousel" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WorInstallerCarousel.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="WorInstaller_SpashScreen" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WorInstaller_SpashScreen.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
 </root>

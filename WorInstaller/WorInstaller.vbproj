@@ -13,6 +13,21 @@
     <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <Deterministic>true</Deterministic>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -23,6 +38,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>WorInstaller.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -46,11 +62,16 @@
   <PropertyGroup>
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -72,6 +93,38 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppService.vb" />
+    <Compile Include="Asistente.designer.vb">
+      <DependentUpon>Asistente.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Asistente.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StepE.designer.vb">
+      <DependentUpon>StepE.vb</DependentUpon>
+    </Compile>
+    <Compile Include="StepE.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StepD.designer.vb">
+      <DependentUpon>StepD.vb</DependentUpon>
+    </Compile>
+    <Compile Include="StepD.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StepC.designer.vb">
+      <DependentUpon>StepC.vb</DependentUpon>
+    </Compile>
+    <Compile Include="StepC.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger.Designer.vb">
+      <DependentUpon>Debugger.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="General.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -87,16 +140,51 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="StepA.designer.vb">
+      <DependentUpon>StepA.vb</DependentUpon>
+    </Compile>
+    <Compile Include="StepA.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StepB.designer.vb">
+      <DependentUpon>StepB.vb</DependentUpon>
+    </Compile>
+    <Compile Include="StepB.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WindowsAPI.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Asistente.resx">
+      <DependentUpon>Asistente.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StepE.resx">
+      <DependentUpon>StepE.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StepD.resx">
+      <DependentUpon>StepD.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StepC.resx">
+      <DependentUpon>StepC.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger.resx">
+      <DependentUpon>Debugger.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="StepA.resx">
+      <DependentUpon>StepA.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StepB.resx">
+      <DependentUpon>StepB.vb</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="My Project\app.manifest" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -107,6 +195,28 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Banner.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Estandarte.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LogoWorInstaller.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WorInstaller_SpashScreen.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WorInstallerCarousel.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

@@ -59,5 +59,89 @@ Namespace My.Resources
                 resourceCulture = value
             End Set
         End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property Banner() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("Banner", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property Estandarte() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("Estandarte", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property LogoWorInstaller() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("LogoWorInstaller", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca una cadena traducida similar a End-User license agreement for AppName
+        '''
+        '''&quot;Software&quot; refers to AppName and all files belonging to the program, including documentation.
+        '''
+        '''1. Software installation and use
+        '''You may install, use, access, run, or otherwise interact with (&quot;Run&quot;) one copy of the SOFTWARE on a single or multiple computers. The SOFTWARE may be installed, accessed, displayed, run, shared or used concurrently on or from different computers. These rights are applicable for personal and commercial use of the SOFTWARE.
+        '''
+        '''2. No conseq [resto de la cadena truncado]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property UserAgreement() As String
+            Get
+                Return ResourceManager.GetString("UserAgreement", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property WorInstaller_SpashScreen() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("WorInstaller_SpashScreen", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca una cadena traducida similar a &lt;html&gt;
+        '''&lt;head&gt;
+        '''&lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=utf-8&quot;&gt;
+        '''&lt;title&gt;Wor Installer Carousel&lt;/title&gt;
+        '''&lt;script type=&quot;text/javascript&quot;&gt;
+        '''var imgNumber = 0;
+        '''var imgCount = 4;
+        '''var viewTime = 12500;
+        '''var divs = document.getElementsByTagName(&quot;div&quot;);
+        '''function ChangeImages()
+        '''{
+        '''	divs[imgNumber].style.display = &apos;none&apos;;
+        '''	imgNumber++;
+        '''	if(imgNumber == imgCount+1)
+        '''	imgNumber = 0;
+        '''	divs[imgNumber].style.display = &apos;block&apos;;
+        '''}
+        '''function SlideShow()
+        '''{
+        '''start = setInterval(&quot;ChangeImages()&quot;, vi [resto de la cadena truncado]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property WorInstallerCarousel() As String
+            Get
+                Return ResourceManager.GetString("WorInstallerCarousel", resourceCulture)
+            End Get
+        End Property
     End Module
 End Namespace

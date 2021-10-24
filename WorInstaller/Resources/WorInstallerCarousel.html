@@ -1,0 +1,97 @@
+﻿<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Wor Installer Carousel</title>
+<script type="text/javascript">
+var imgNumber = 0;
+var imgCount = 4;
+var viewTime = 12500;
+var divs = document.getElementsByTagName("div");
+function ChangeImages()
+{
+	divs[imgNumber].style.display = 'none';
+	imgNumber++;
+	if(imgNumber == imgCount+1)
+	imgNumber = 0;
+	divs[imgNumber].style.display = 'block';
+}
+function SlideShow()
+{
+start = setInterval("ChangeImages()", viewTime);
+}
+</script>
+</head>
+<body onload="setTimeout('SlideShow()');">
+    <style type="text/css">
+        body {
+            background-repeat: no-repeat;
+            background: url(back.png) repeat-x top center;
+            background-color: #F0F0F0;
+            font-family: Verdana, Arial, Helvetica, sans-serif;
+            font-size: 11px;
+            color: #3e3d3f;
+        }
+        td {
+            font-family: Verdana, Arial, Helvetica, sans-serif;
+            font-size: 11px;
+            color: #3e3d3f;
+        }
+        H1 {
+            font-family: Verdana, Arial, Helvetica, sans-serif;
+            font-size: 12px;
+            color: #3e3d3f;
+        }
+        i {
+            font-size: 9px;
+            color: #3e3d3f;
+        }
+    </style>
+    <table width="99%" height="99%">
+        <tr>
+            <td align="center">
+                <table width="435" height="99%">
+                    <tr>
+                        <td align="left">
+                            <div id="msgs0" style="display:block; width: 435px;">
+                                <img src="http://WorcomeStudios.comule.com/images/FreeResources/Logo_WorcomeSimply.png" width="70" hspace="15" vspace="5" align="left">
+                                <h1>Wor Installer:<br />Always helping to install and update</h1>
+                                Install and update programs easily, quickly and securely from our servers, or locally!
+                            </div>
+							<div id="msgs1" style="display:none; width: 435px;">
+                                <img src="http://WorcomeStudios.comule.com/images/FreeResources/Logo_WorcomeSimply.png" width="100" hspace="15" vspace="15" align="right">
+                                <h1>Visit us!<br />Worcome Studios website</h1>
+                                Much to see and also very up to date, we recommend you take a walk through our beautiful <a href="http://worcomestudios.comule.com/" title="WorcomeStudios.comule.com" target="_blank">website</a>.
+                                <ul>
+                                    <li>News</li>
+                                    <li>Downloads and Resources</li>
+                                    <li>Contact and About us</li>
+                                </ul>
+                            </div>
+							<div id="msgs2" style="display:none; width: 435px;">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/4/4c/YouTube_icon.png" width="75" hspace="15" vspace="5" align="left">
+                                <h1>The Worcome Studios YouTube Channel</h1>
+                                Watch our videos about reviews, help, dev on and much more!
+                                <br />
+                                <a href="https://www.youtube.com/channel/UClbKS8sbmoE_C5fvd9jPtnw" title="Go" target="_blank">www.youtube.com/WorcomeStudios</a>
+                            </div>
+                            <div id="msgs3" style="display:none; width: 435px;">
+                                <img src="http://WorcomeStudios.comule.com/images/Other/Support.png" width="70" hspace="15" vspace="5" align="left">
+                                <h1>Need help?</h1>
+                                Contact <a href="https://docs.google.com/forms/d/e/1FAIpQLSehlhtO20WwnlGDxiX_hr5mT4WJUZ3yhrO7HQSNSyvxetJJfQ/viewform?usp=sf_link" title="Go" target="_blank">support</a> to solve your problems, doubts and more!
+                                <br /><br />
+                            </div>
+                            <div id="msgs4" style="display:none; width: 435px;">
+                                <img src="http://WorcomeStudios.comule.com/images/Other/News.png" width="75" hspace="15" vspace="5" align="left">
+                                <h1>Wor News<br />Subscribe to our news channel!</h1>
+                                Be informed about the news that are currently breaking it!
+                                <br />
+                                <a href="https://docs.google.com/forms/d/e/1FAIpQLScg6QCD3yGeJ-sXrcrXypxCjFZ9nld_SgxmfG76KjsmfkI95A/viewform?usp=sf_link" title="WorcomeStudios.comule.com/WorNews.html" target="_blank">Subscribe now</a>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
