@@ -65,6 +65,9 @@
   <PropertyGroup>
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>LogoWorInstaller.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -100,6 +103,7 @@
     <Compile Include="Asistente.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Idioma.vb" />
     <Compile Include="StepE.designer.vb">
       <DependentUpon>StepE.vb</DependentUpon>
     </Compile>
@@ -217,6 +221,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\WorInstallerCarousel.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="LogoWorInstaller.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

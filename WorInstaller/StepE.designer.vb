@@ -195,7 +195,7 @@ Partial Class StepE
         Me.btnEnd.Name = "btnEnd"
         Me.btnEnd.Size = New System.Drawing.Size(150, 25)
         Me.btnEnd.TabIndex = 0
-        Me.btnEnd.Text = "Espere..."
+        Me.btnEnd.Text = "Cerrar"
         Me.btnEnd.UseVisualStyleBackColor = True
         '
         'ProgressBar1

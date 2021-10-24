@@ -2,6 +2,13 @@
     Public UserClose As Boolean = True
 
     Private Sub StepA_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        AddToInstallerLog("StepA", "Step A Iniciado! " & DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss tt"), False)
+        If AppLanguage = 1 Then
+            Idioma.Forms.Main.OnLoad.ESP()
+        Else
+            Idioma.Forms.Main.OnLoad.ENG()
+        End If
+        Idioma.Forms.Main.OnLoad.AfterLoad()
         Me.BringToFront()
         Dim StartBlinkForFocus = WindowsApi.FlashWindow(Process.GetCurrentProcess().MainWindowHandle, True, True, 5)
     End Sub

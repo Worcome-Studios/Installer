@@ -26,8 +26,8 @@ Partial Class StepD
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(StepD))
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.PIC_IMG_Icon = New System.Windows.Forms.PictureBox()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
+        Me.lblTitle = New System.Windows.Forms.Label()
+        Me.lblBody = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.btnRetry = New System.Windows.Forms.Button()
         Me.Label4 = New System.Windows.Forms.Label()
@@ -70,23 +70,23 @@ Partial Class StepD
         Me.PIC_IMG_Icon.TabIndex = 2
         Me.PIC_IMG_Icon.TabStop = False
         '
-        'Label1
+        'lblTitle
         '
-        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(122, 69)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(505, 37)
-        Me.Label1.TabIndex = 3
-        Me.Label1.Text = "Wor: AppName Installer"
-        Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lblTitle.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblTitle.Location = New System.Drawing.Point(122, 69)
+        Me.lblTitle.Name = "lblTitle"
+        Me.lblTitle.Size = New System.Drawing.Size(505, 37)
+        Me.lblTitle.TabIndex = 3
+        Me.lblTitle.Text = "Wor: AppName Installer"
+        Me.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'Label2
+        'lblBody
         '
-        Me.Label2.Location = New System.Drawing.Point(127, 111)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(500, 75)
-        Me.Label2.TabIndex = 4
-        Me.Label2.Text = "Instalacion en curso" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "No desconecte el equipo ni lo apage durante la instalacio" &
+        Me.lblBody.Location = New System.Drawing.Point(127, 111)
+        Me.lblBody.Name = "lblBody"
+        Me.lblBody.Size = New System.Drawing.Size(500, 75)
+        Me.lblBody.TabIndex = 4
+        Me.lblBody.Text = "Instalacion en curso" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "No desconecte el equipo ni lo apage durante la instalacio" &
     "n." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Puede seguir utilizando su Equipo con normalidad."
         '
         'Panel1
@@ -206,8 +206,8 @@ Partial Class StepD
         Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.PIC_IMG_Estandarte)
         Me.Controls.Add(Me.Panel1)
-        Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.Label1)
+        Me.Controls.Add(Me.lblBody)
+        Me.Controls.Add(Me.lblTitle)
         Me.Controls.Add(Me.PIC_IMG_Icon)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.RichTextBox1)
@@ -228,8 +228,8 @@ Partial Class StepD
 
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents PIC_IMG_Icon As PictureBox
-    Friend WithEvents Label1 As Label
-    Friend WithEvents Label2 As Label
+    Friend WithEvents lblTitle As Label
+    Friend WithEvents lblBody As Label
     Friend WithEvents Panel1 As Panel
     Friend WithEvents btnNext As Button
     Friend WithEvents ProgressBar1 As ProgressBar

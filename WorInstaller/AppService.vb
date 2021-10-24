@@ -250,27 +250,11 @@ Module AppService
         'AL FINALIZAR TODO AppService, ENTONCES ESTE METODO SERA LLAMADO
         If WorSupport.AppServiceSuccess = False Or WorSupport.ServerSwitchSuccess = False Or WorSupport.SignRegistrySuccess = False Or WorSupport.AppStatusSuccess = False Then
             'SI NO ES EXITOSO.
-
-
+        Else
+            'ES EXITOSO.
         End If
-        AppImageLocation = ServerSwitch.SW_UsingServer & "/images/AppsImage/Icons/" & AssemblyPackageName & ".png"
-        StepB.rbAccept.Enabled = True
-        Try
-            'OJO, si es 64 entonces si es retrocompatible con 32, no asi cuando es de 32
-            If Installer_BitArch = 64 And ProcessorArch = "64" Then
-                InstallFolder = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) & "\Worcome Studios\" & AssemblyName
-            ElseIf Installer_BitArch = 32 And ProcessorArch = "32" Then
-                InstallFolder = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) & "\Worcome Studios\" & AssemblyName
-            ElseIf Installer_BitArch = 32 And ProcessorArch = "64" Then
-                InstallFolder = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) & "\Worcome Studios\" & AssemblyName
-            ElseIf Installer_BitArch = 64 And ProcessorArch = "32" Then
-                MsgBox("This installer is not compatible with the architecture", MsgBoxStyle.Critical, "Worcome Runtime Security")
-                End
-            Else
-                InstallFolder = "C:\Program Files" & "\Worcome Studios\" & AssemblyName
-            End If
-        Catch
-        End Try
+        'EN GENERAL, TERMINO.
+        AppServiceHasFinished()
     End Sub
 End Module
 Module ServerSwitch
@@ -556,7 +540,12 @@ Module AppStatus
     Public Installer_Status As Boolean
     Public Installer_BinDownload As String
     Public Installer_InsDownload As String
-    Public Installer_BitArch As String
+    Public Installer_CanDowngrade As Boolean
+    Public Installer_NeedStartUp As String
+    Public Installer_NeedRestart As Boolean
+    Public Installer_NeedElevateAccess As Boolean
+    Public Installer_InstallFolder As String
+    Public Installer_BitArch As SByte
 
     Sub AppStatusStep()
         Try
@@ -596,6 +585,11 @@ Module AppStatus
             Installer_Status = Boolean.Parse(GetIniValue("Installer", "Status", AppServiceFilePath))
             Installer_BinDownload = GetIniValue("Installer", "BinDownload", AppServiceFilePath)
             Installer_InsDownload = GetIniValue("Installer", "InsDownload", AppServiceFilePath)
+            Installer_CanDowngrade = Boolean.Parse(GetIniValue("Installer", "CanDowngrade", AppServiceFilePath))
+            Installer_NeedStartUp = GetIniValue("Installer", "NeedStartUp", AppServiceFilePath)
+            Installer_NeedRestart = Boolean.Parse(GetIniValue("Installer", "NeedRestart", AppServiceFilePath))
+            Installer_NeedElevateAccess = Boolean.Parse(GetIniValue("Installer", "NeedElevateAccess", AppServiceFilePath))
+            Installer_InstallFolder = GetIniValue("Installer", "InstallFolder", AppServiceFilePath)
             Installer_BitArch = GetIniValue("Installer", "BitArch", AppServiceFilePath)
             ProcStatus_2 = True
         Catch ex As Exception

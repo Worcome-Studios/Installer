@@ -25,7 +25,7 @@ Partial Class StepB
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(StepB))
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.PIC_IMG_Icon = New System.Windows.Forms.PictureBox()
-        Me.Label1 = New System.Windows.Forms.Label()
+        Me.lblTitle = New System.Windows.Forms.Label()
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.btnNext = New System.Windows.Forms.Button()
         Me.btnExit = New System.Windows.Forms.Button()
@@ -64,15 +64,15 @@ Partial Class StepB
         Me.PIC_IMG_Icon.TabIndex = 2
         Me.PIC_IMG_Icon.TabStop = False
         '
-        'Label1
+        'lblTitle
         '
-        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(122, 69)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(505, 37)
-        Me.Label1.TabIndex = 3
-        Me.Label1.Text = "Wor: AppName Installer"
-        Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lblTitle.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblTitle.Location = New System.Drawing.Point(122, 69)
+        Me.lblTitle.Name = "lblTitle"
+        Me.lblTitle.Size = New System.Drawing.Size(505, 37)
+        Me.lblTitle.TabIndex = 3
+        Me.lblTitle.Text = "Wor: AppName Installer"
+        Me.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'ProgressBar1
         '
@@ -169,7 +169,7 @@ Partial Class StepB
         Me.Controls.Add(Me.PIC_IMG_Estandarte)
         Me.Controls.Add(Me.rtbEULA)
         Me.Controls.Add(Me.Panel1)
-        Me.Controls.Add(Me.Label1)
+        Me.Controls.Add(Me.lblTitle)
         Me.Controls.Add(Me.PIC_IMG_Icon)
         Me.Controls.Add(Me.PictureBox1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
@@ -190,7 +190,7 @@ Partial Class StepB
 
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents PIC_IMG_Icon As PictureBox
-    Friend WithEvents Label1 As Label
+    Friend WithEvents lblTitle As Label
     Friend WithEvents ProgressBar1 As ProgressBar
     Friend WithEvents btnNext As Button
     Friend WithEvents btnExit As Button

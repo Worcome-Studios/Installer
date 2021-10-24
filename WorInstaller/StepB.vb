@@ -2,6 +2,13 @@
     Public UserClose As Boolean = True
 
     Private Sub StepB_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        AddToInstallerLog("StepB", "Step B Iniciado! " & DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss tt"), False)
+        If AppLanguage = 1 Then
+            Idioma.Forms.Dos.OnLoad.ESP()
+        Else
+            Idioma.Forms.Dos.OnLoad.ENG()
+        End If
+        Idioma.Forms.Dos.OnLoad.AfterLoad()
         If AppImageLocation IsNot Nothing Then
             PIC_IMG_Icon.ImageLocation = AppImageLocation
         End If
