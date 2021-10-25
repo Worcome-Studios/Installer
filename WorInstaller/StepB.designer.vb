@@ -177,7 +177,7 @@ Partial Class StepB
         Me.MaximizeBox = False
         Me.Name = "StepB"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
-        Me.Text = "Wor Installer"
+        Me.Text = "User Agreement | WorInstaller"
         Me.TopMost = True
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PIC_IMG_Icon, System.ComponentModel.ISupportInitialize).EndInit()

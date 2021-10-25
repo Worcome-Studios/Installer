@@ -24,8 +24,10 @@
                     ElseIf parametro Like "*/ForceDowngrade*" Then
                         CanDowngrade = True
                     ElseIf parametro Like "*/Uninstall*" Then
-                        UninstallMode = True
                         InstallMode = False
+                        UninstallMode = True
+                        UpdateMode = False
+                        AssistantMode = True
                     End If
                 Next
             End If
@@ -63,6 +65,24 @@
             AssemblyVersion = AppAssemblyVersion
         Catch ex As Exception
             AddToInstallerLog("SetAssemblyInfo@Debugger", "Error: " & ex.Message, True)
+        End Try
+    End Sub
+
+    Sub StartFromAnotherLocation(Optional ByVal CloseInstance As Boolean = True)
+        Try
+            Dim TempFolder As String = "C:\Users\" & Environment.UserName & "\AppData\Local\Temp"
+            If Application.ExecutablePath.Contains("uninstall.exe") Then
+                If My.Computer.FileSystem.FileExists(TempFolder & "\" & AssemblyName & "_Assistant.exe") Then
+                    My.Computer.FileSystem.DeleteFile(TempFolder & "\" & AssemblyName & "_Assistant.exe")
+                End If
+                My.Computer.FileSystem.CopyFile(Application.ExecutablePath, TempFolder & "\" & AssemblyName & "_Assistant.exe")
+                Process.Start(TempFolder & "\" & AssemblyName & "_Assistant.exe", ArgCommandLine)
+                If CloseInstance Then
+                    End 'END_PROGRAM
+                End If
+            End If
+        Catch ex As Exception
+            AddToInstallerLog("StartFromAnotherLocation@Debugger", "Error: " & ex.Message, True)
         End Try
     End Sub
 End Class

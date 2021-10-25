@@ -217,7 +217,7 @@ Partial Class StepA
         Me.MaximizeBox = False
         Me.Name = "StepA"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Wor Installer"
+        Me.Text = "Introduction | Wor Installer"
         CType(Me.PIC_IMG_Icon, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PIC_IMG_Banner, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PIC_IMG_Estandarte, System.ComponentModel.ISupportInitialize).EndInit()

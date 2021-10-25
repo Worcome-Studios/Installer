@@ -35,7 +35,11 @@
     Sub Continuar()
         If rbAccept.Checked = True Then
             UserClose = False
-            SecureFormClose(StepC, Me)
+            If ReinstallMode = False Then
+                SecureFormClose(StepC, Me)
+            Else
+                SecureFormClose(StepD, Me)
+            End If
         Else
             UserClose = False
             AbortInstallProcess(Me, "El usuario no acepto el Acuerdo con el Usuario.")

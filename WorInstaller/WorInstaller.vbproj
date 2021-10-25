@@ -96,6 +96,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationEvents.vb" />
     <Compile Include="AppService.vb" />
     <Compile Include="Asistente.designer.vb">
       <DependentUpon>Asistente.vb</DependentUpon>

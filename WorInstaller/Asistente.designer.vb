@@ -25,33 +25,33 @@ Partial Class Asistente
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Asistente))
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.PIC_IMG_Icon = New System.Windows.Forms.PictureBox()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
+        Me.lblTitle = New System.Windows.Forms.Label()
+        Me.lblBody = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.Button2 = New System.Windows.Forms.Button()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
+        Me.btnExit = New System.Windows.Forms.Button()
+        Me.lblAssemblyInfo = New System.Windows.Forms.Label()
+        Me.rtbLog = New System.Windows.Forms.RichTextBox()
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
-        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
-        Me.Button4 = New System.Windows.Forms.Button()
-        Me.Button5 = New System.Windows.Forms.Button()
-        Me.Button6 = New System.Windows.Forms.Button()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.Button3 = New System.Windows.Forms.Button()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.llblAbout = New System.Windows.Forms.LinkLabel()
+        Me.btnReinstall = New System.Windows.Forms.Button()
+        Me.btnUninstall = New System.Windows.Forms.Button()
+        Me.btnReset = New System.Windows.Forms.Button()
+        Me.lblReinstall = New System.Windows.Forms.Label()
+        Me.lblUninstall = New System.Windows.Forms.Label()
+        Me.lblReset = New System.Windows.Forms.Label()
+        Me.btnUpdate = New System.Windows.Forms.Button()
+        Me.lblUpdate = New System.Windows.Forms.Label()
+        Me.btnSearchUpdates = New System.Windows.Forms.Button()
         Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
-        Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
-        Me.Label8 = New System.Windows.Forms.Label()
+        Me.picAppIcon = New System.Windows.Forms.PictureBox()
+        Me.llblUseGuide = New System.Windows.Forms.LinkLabel()
+        Me.lblSearchUpdates = New System.Windows.Forms.Label()
         Me.PIC_IMG_Estandarte = New System.Windows.Forms.PictureBox()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PIC_IMG_Icon, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.picAppIcon, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PIC_IMG_Estandarte, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -79,64 +79,64 @@ Partial Class Asistente
         Me.PIC_IMG_Icon.TabIndex = 2
         Me.PIC_IMG_Icon.TabStop = False
         '
-        'Label1
+        'lblTitle
         '
-        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(122, 69)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(377, 37)
-        Me.Label1.TabIndex = 3
-        Me.Label1.Text = "Wor: AppName Installer"
-        Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lblTitle.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblTitle.Location = New System.Drawing.Point(122, 69)
+        Me.lblTitle.Name = "lblTitle"
+        Me.lblTitle.Size = New System.Drawing.Size(377, 37)
+        Me.lblTitle.TabIndex = 3
+        Me.lblTitle.Text = "Wor: AppName Installer"
+        Me.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'Label2
+        'lblBody
         '
-        Me.Label2.Location = New System.Drawing.Point(127, 111)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(372, 64)
-        Me.Label2.TabIndex = 4
-        Me.Label2.Text = "Asistente de instalacion" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Eliga una opcion"
+        Me.lblBody.Location = New System.Drawing.Point(127, 111)
+        Me.lblBody.Name = "lblBody"
+        Me.lblBody.Size = New System.Drawing.Size(372, 64)
+        Me.lblBody.TabIndex = 4
+        Me.lblBody.Text = "Asistente de instalacion" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Eliga una opcion"
         '
         'Panel1
         '
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.Panel1.Controls.Add(Me.Button2)
-        Me.Panel1.Controls.Add(Me.Label7)
-        Me.Panel1.Controls.Add(Me.RichTextBox1)
+        Me.Panel1.Controls.Add(Me.btnExit)
+        Me.Panel1.Controls.Add(Me.lblAssemblyInfo)
+        Me.Panel1.Controls.Add(Me.rtbLog)
         Me.Panel1.Controls.Add(Me.ProgressBar1)
         Me.Panel1.Location = New System.Drawing.Point(118, 398)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(520, 113)
         Me.Panel1.TabIndex = 11
         '
-        'Button2
+        'btnExit
         '
-        Me.Button2.Location = New System.Drawing.Point(3, 60)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(105, 25)
-        Me.Button2.TabIndex = 4
-        Me.Button2.Text = "< Salir"
-        Me.Button2.UseVisualStyleBackColor = True
+        Me.btnExit.Location = New System.Drawing.Point(3, 60)
+        Me.btnExit.Name = "btnExit"
+        Me.btnExit.Size = New System.Drawing.Size(105, 25)
+        Me.btnExit.TabIndex = 7
+        Me.btnExit.Text = "< Salir"
+        Me.btnExit.UseVisualStyleBackColor = True
         '
-        'Label7
+        'lblAssemblyInfo
         '
-        Me.Label7.Location = New System.Drawing.Point(3, 3)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(240, 54)
-        Me.Label7.TabIndex = 22
+        Me.lblAssemblyInfo.Location = New System.Drawing.Point(3, 3)
+        Me.lblAssemblyInfo.Name = "lblAssemblyInfo"
+        Me.lblAssemblyInfo.Size = New System.Drawing.Size(240, 54)
+        Me.lblAssemblyInfo.TabIndex = 22
         '
-        'RichTextBox1
+        'rtbLog
         '
-        Me.RichTextBox1.BackColor = System.Drawing.SystemColors.Control
-        Me.RichTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.RichTextBox1.Cursor = System.Windows.Forms.Cursors.Arrow
-        Me.RichTextBox1.Location = New System.Drawing.Point(249, 3)
-        Me.RichTextBox1.Name = "RichTextBox1"
-        Me.RichTextBox1.ReadOnly = True
-        Me.RichTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical
-        Me.RichTextBox1.Size = New System.Drawing.Size(264, 82)
-        Me.RichTextBox1.TabIndex = 20
-        Me.RichTextBox1.Text = ""
+        Me.rtbLog.BackColor = System.Drawing.SystemColors.Control
+        Me.rtbLog.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.rtbLog.Cursor = System.Windows.Forms.Cursors.Arrow
+        Me.rtbLog.Location = New System.Drawing.Point(249, 3)
+        Me.rtbLog.Name = "rtbLog"
+        Me.rtbLog.ReadOnly = True
+        Me.rtbLog.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical
+        Me.rtbLog.Size = New System.Drawing.Size(264, 82)
+        Me.rtbLog.TabIndex = 8
+        Me.rtbLog.Text = ""
         '
         'ProgressBar1
         '
@@ -146,159 +146,158 @@ Partial Class Asistente
         Me.ProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee
         Me.ProgressBar1.TabIndex = 5
         '
-        'LinkLabel1
+        'llblAbout
         '
-        Me.LinkLabel1.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.LinkLabel1.Location = New System.Drawing.Point(409, 295)
-        Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(108, 13)
-        Me.LinkLabel1.TabIndex = 7
-        Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "Ver About"
-        Me.LinkLabel1.TextAlign = System.Drawing.ContentAlignment.TopRight
+        Me.llblAbout.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.llblAbout.Location = New System.Drawing.Point(409, 295)
+        Me.llblAbout.Name = "llblAbout"
+        Me.llblAbout.Size = New System.Drawing.Size(108, 13)
+        Me.llblAbout.TabIndex = 5
+        Me.llblAbout.TabStop = True
+        Me.llblAbout.Text = "Ver About"
+        Me.llblAbout.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
-        'Button4
+        'btnReinstall
         '
-        Me.Button4.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.Button4.Location = New System.Drawing.Point(17, 109)
-        Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(88, 42)
-        Me.Button4.TabIndex = 3
-        Me.Button4.Text = "Reinstalar"
-        Me.Button4.UseVisualStyleBackColor = True
+        Me.btnReinstall.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnReinstall.Location = New System.Drawing.Point(17, 109)
+        Me.btnReinstall.Name = "btnReinstall"
+        Me.btnReinstall.Size = New System.Drawing.Size(88, 42)
+        Me.btnReinstall.TabIndex = 3
+        Me.btnReinstall.Text = "Reinstalar"
+        Me.btnReinstall.UseVisualStyleBackColor = True
         '
-        'Button5
+        'btnUninstall
         '
-        Me.Button5.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.Button5.Location = New System.Drawing.Point(17, 157)
-        Me.Button5.Name = "Button5"
-        Me.Button5.Size = New System.Drawing.Size(88, 42)
-        Me.Button5.TabIndex = 2
-        Me.Button5.Text = "Desinstalar"
-        Me.Button5.UseVisualStyleBackColor = True
+        Me.btnUninstall.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnUninstall.Location = New System.Drawing.Point(17, 157)
+        Me.btnUninstall.Name = "btnUninstall"
+        Me.btnUninstall.Size = New System.Drawing.Size(88, 42)
+        Me.btnUninstall.TabIndex = 2
+        Me.btnUninstall.Text = "Desinstalar"
+        Me.btnUninstall.UseVisualStyleBackColor = True
         '
-        'Button6
+        'btnReset
         '
-        Me.Button6.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.Button6.Location = New System.Drawing.Point(17, 205)
-        Me.Button6.Name = "Button6"
-        Me.Button6.Size = New System.Drawing.Size(88, 42)
-        Me.Button6.TabIndex = 1
-        Me.Button6.Text = "Resetear"
-        Me.Button6.UseVisualStyleBackColor = True
+        Me.btnReset.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnReset.Location = New System.Drawing.Point(17, 205)
+        Me.btnReset.Name = "btnReset"
+        Me.btnReset.Size = New System.Drawing.Size(88, 42)
+        Me.btnReset.TabIndex = 1
+        Me.btnReset.Text = "Resetear"
+        Me.btnReset.UseVisualStyleBackColor = True
         '
-        'Label4
+        'lblReinstall
         '
-        Me.Label4.Location = New System.Drawing.Point(111, 109)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(393, 42)
-        Me.Label4.TabIndex = 17
-        Me.Label4.Text = "Una reinstalacion completa, el instalador no limpiara datos del usuario"
-        Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lblReinstall.Location = New System.Drawing.Point(111, 109)
+        Me.lblReinstall.Name = "lblReinstall"
+        Me.lblReinstall.Size = New System.Drawing.Size(393, 42)
+        Me.lblReinstall.TabIndex = 17
+        Me.lblReinstall.Text = "Una reinstalacion completa, el instalador no limpiara datos del usuario"
+        Me.lblReinstall.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'Label5
+        'lblUninstall
         '
-        Me.Label5.Location = New System.Drawing.Point(111, 157)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(393, 42)
-        Me.Label5.TabIndex = 18
-        Me.Label5.Text = "Elimina el programa de tu ordenador como si jamas hubiese sido instalado"
-        Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lblUninstall.Location = New System.Drawing.Point(111, 157)
+        Me.lblUninstall.Name = "lblUninstall"
+        Me.lblUninstall.Size = New System.Drawing.Size(393, 42)
+        Me.lblUninstall.TabIndex = 18
+        Me.lblUninstall.Text = "Elimina el programa de tu ordenador como si jamas hubiese sido instalado"
+        Me.lblUninstall.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'Label6
+        'lblReset
         '
-        Me.Label6.Location = New System.Drawing.Point(111, 205)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(393, 42)
-        Me.Label6.TabIndex = 19
-        Me.Label6.Text = "Restauracion de fabrica, elimina todos sus archivos vinculados" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Eliminara bases d" &
+        Me.lblReset.Location = New System.Drawing.Point(111, 205)
+        Me.lblReset.Name = "lblReset"
+        Me.lblReset.Size = New System.Drawing.Size(393, 42)
+        Me.lblReset.TabIndex = 19
+        Me.lblReset.Text = "Restauracion de fabrica, elimina todos sus archivos vinculados" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Eliminara bases d" &
     "e datos, datos del usuario, etc"
-        Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lblReset.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'Button3
+        'btnUpdate
         '
-        Me.Button3.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.Button3.Location = New System.Drawing.Point(17, 109)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(156, 42)
-        Me.Button3.TabIndex = 5
-        Me.Button3.Text = "Actualizar"
-        Me.Button3.UseVisualStyleBackColor = True
-        Me.Button3.Visible = False
+        Me.btnUpdate.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnUpdate.Location = New System.Drawing.Point(17, 109)
+        Me.btnUpdate.Name = "btnUpdate"
+        Me.btnUpdate.Size = New System.Drawing.Size(156, 42)
+        Me.btnUpdate.TabIndex = 4
+        Me.btnUpdate.Text = "Actualizar"
+        Me.btnUpdate.UseVisualStyleBackColor = True
+        Me.btnUpdate.Visible = False
         '
-        'Label3
+        'lblUpdate
         '
-        Me.Label3.Location = New System.Drawing.Point(179, 109)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(325, 42)
-        Me.Label3.TabIndex = 21
-        Me.Label3.Text = "Actualizar el programa a su version mas reciente"
-        Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.Label3.Visible = False
+        Me.lblUpdate.Location = New System.Drawing.Point(179, 109)
+        Me.lblUpdate.Name = "lblUpdate"
+        Me.lblUpdate.Size = New System.Drawing.Size(325, 42)
+        Me.lblUpdate.TabIndex = 21
+        Me.lblUpdate.Text = "Actualizar el programa a su version mas reciente"
+        Me.lblUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lblUpdate.Visible = False
         '
-        'Button1
+        'btnSearchUpdates
         '
-        Me.Button1.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.Button1.Location = New System.Drawing.Point(17, 253)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(88, 42)
-        Me.Button1.TabIndex = 0
-        Me.Button1.Text = "Buscar actualizaciones"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.btnSearchUpdates.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnSearchUpdates.Location = New System.Drawing.Point(17, 253)
+        Me.btnSearchUpdates.Name = "btnSearchUpdates"
+        Me.btnSearchUpdates.Size = New System.Drawing.Size(88, 42)
+        Me.btnSearchUpdates.TabIndex = 0
+        Me.btnSearchUpdates.Text = "Buscar actualizaciones"
+        Me.btnSearchUpdates.UseVisualStyleBackColor = True
         '
         'Panel2
         '
-        Me.Panel2.Controls.Add(Me.PictureBox2)
-        Me.Panel2.Controls.Add(Me.LinkLabel2)
-        Me.Panel2.Controls.Add(Me.Label8)
-        Me.Panel2.Controls.Add(Me.LinkLabel1)
-        Me.Panel2.Controls.Add(Me.Button3)
-        Me.Panel2.Controls.Add(Me.Button4)
-        Me.Panel2.Controls.Add(Me.Label3)
-        Me.Panel2.Controls.Add(Me.Button1)
-        Me.Panel2.Controls.Add(Me.Label6)
-        Me.Panel2.Controls.Add(Me.Button5)
-        Me.Panel2.Controls.Add(Me.Label5)
-        Me.Panel2.Controls.Add(Me.Button6)
-        Me.Panel2.Controls.Add(Me.Label4)
+        Me.Panel2.Controls.Add(Me.picAppIcon)
+        Me.Panel2.Controls.Add(Me.llblUseGuide)
+        Me.Panel2.Controls.Add(Me.lblSearchUpdates)
+        Me.Panel2.Controls.Add(Me.llblAbout)
+        Me.Panel2.Controls.Add(Me.btnUpdate)
+        Me.Panel2.Controls.Add(Me.btnReinstall)
+        Me.Panel2.Controls.Add(Me.lblUpdate)
+        Me.Panel2.Controls.Add(Me.btnSearchUpdates)
+        Me.Panel2.Controls.Add(Me.lblReset)
+        Me.Panel2.Controls.Add(Me.btnUninstall)
+        Me.Panel2.Controls.Add(Me.lblUninstall)
+        Me.Panel2.Controls.Add(Me.btnReset)
+        Me.Panel2.Controls.Add(Me.lblReinstall)
         Me.Panel2.Location = New System.Drawing.Point(118, 69)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(520, 328)
         Me.Panel2.TabIndex = 0
         '
-        'PictureBox2
+        'picAppIcon
         '
-        Me.PictureBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.PictureBox2.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.PictureBox2.ErrorImage = Nothing
-        Me.PictureBox2.InitialImage = Nothing
-        Me.PictureBox2.Location = New System.Drawing.Point(472, 3)
-        Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(45, 45)
-        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.PictureBox2.TabIndex = 13
-        Me.PictureBox2.TabStop = False
-        Me.PictureBox2.Visible = False
+        Me.picAppIcon.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.picAppIcon.ErrorImage = Nothing
+        Me.picAppIcon.InitialImage = Nothing
+        Me.picAppIcon.Location = New System.Drawing.Point(472, 3)
+        Me.picAppIcon.Name = "picAppIcon"
+        Me.picAppIcon.Size = New System.Drawing.Size(45, 45)
+        Me.picAppIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.picAppIcon.TabIndex = 13
+        Me.picAppIcon.TabStop = False
+        Me.picAppIcon.Visible = False
         '
-        'LinkLabel2
+        'llblUseGuide
         '
-        Me.LinkLabel2.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.LinkLabel2.Location = New System.Drawing.Point(409, 313)
-        Me.LinkLabel2.Name = "LinkLabel2"
-        Me.LinkLabel2.Size = New System.Drawing.Size(108, 13)
-        Me.LinkLabel2.TabIndex = 6
-        Me.LinkLabel2.TabStop = True
-        Me.LinkLabel2.Text = "Ver Guia de uso"
-        Me.LinkLabel2.TextAlign = System.Drawing.ContentAlignment.TopRight
+        Me.llblUseGuide.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.llblUseGuide.Location = New System.Drawing.Point(409, 313)
+        Me.llblUseGuide.Name = "llblUseGuide"
+        Me.llblUseGuide.Size = New System.Drawing.Size(108, 13)
+        Me.llblUseGuide.TabIndex = 6
+        Me.llblUseGuide.TabStop = True
+        Me.llblUseGuide.Text = "Ver Guia de uso"
+        Me.llblUseGuide.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
-        'Label8
+        'lblSearchUpdates
         '
-        Me.Label8.Location = New System.Drawing.Point(111, 253)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(393, 42)
-        Me.Label8.TabIndex = 23
-        Me.Label8.Text = "Busca actualizaciones disponibles en el Servidor"
-        Me.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lblSearchUpdates.Location = New System.Drawing.Point(111, 253)
+        Me.lblSearchUpdates.Name = "lblSearchUpdates"
+        Me.lblSearchUpdates.Size = New System.Drawing.Size(393, 42)
+        Me.lblSearchUpdates.TabIndex = 23
+        Me.lblSearchUpdates.Text = "Busca actualizaciones disponibles en el Servidor"
+        Me.lblSearchUpdates.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'PIC_IMG_Estandarte
         '
@@ -315,10 +314,10 @@ Partial Class Asistente
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(639, 512)
-        Me.Controls.Add(Me.Label2)
+        Me.Controls.Add(Me.lblBody)
         Me.Controls.Add(Me.PIC_IMG_Estandarte)
         Me.Controls.Add(Me.Panel1)
-        Me.Controls.Add(Me.Label1)
+        Me.Controls.Add(Me.lblTitle)
         Me.Controls.Add(Me.PIC_IMG_Icon)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.Panel2)
@@ -332,7 +331,7 @@ Partial Class Asistente
         CType(Me.PIC_IMG_Icon, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
         Me.Panel2.ResumeLayout(False)
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.picAppIcon, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PIC_IMG_Estandarte, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
@@ -340,26 +339,26 @@ Partial Class Asistente
 
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents PIC_IMG_Icon As PictureBox
-    Friend WithEvents Label1 As Label
-    Friend WithEvents Label2 As Label
+    Friend WithEvents lblTitle As Label
+    Friend WithEvents lblBody As Label
     Friend WithEvents Panel1 As Panel
-    Friend WithEvents Button2 As Button
-    Friend WithEvents Button4 As Button
-    Friend WithEvents Button5 As Button
-    Friend WithEvents Button6 As Button
-    Friend WithEvents Label4 As Label
-    Friend WithEvents Label5 As Label
-    Friend WithEvents Label6 As Label
-    Friend WithEvents RichTextBox1 As RichTextBox
-    Friend WithEvents Button3 As Button
-    Friend WithEvents Label3 As Label
-    Friend WithEvents Label7 As Label
+    Friend WithEvents btnExit As Button
+    Friend WithEvents btnReinstall As Button
+    Friend WithEvents btnUninstall As Button
+    Friend WithEvents btnReset As Button
+    Friend WithEvents lblReinstall As Label
+    Friend WithEvents lblUninstall As Label
+    Friend WithEvents lblReset As Label
+    Friend WithEvents rtbLog As RichTextBox
+    Friend WithEvents btnUpdate As Button
+    Friend WithEvents lblUpdate As Label
+    Friend WithEvents lblAssemblyInfo As Label
     Friend WithEvents ProgressBar1 As ProgressBar
-    Friend WithEvents LinkLabel1 As LinkLabel
-    Friend WithEvents Button1 As Button
+    Friend WithEvents llblAbout As LinkLabel
+    Friend WithEvents btnSearchUpdates As Button
     Friend WithEvents Panel2 As Panel
-    Friend WithEvents Label8 As Label
-    Friend WithEvents LinkLabel2 As LinkLabel
+    Friend WithEvents lblSearchUpdates As Label
+    Friend WithEvents llblUseGuide As LinkLabel
     Friend WithEvents PIC_IMG_Estandarte As PictureBox
-    Friend WithEvents PictureBox2 As PictureBox
+    Friend WithEvents picAppIcon As PictureBox
 End Class

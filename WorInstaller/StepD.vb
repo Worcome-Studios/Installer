@@ -39,7 +39,15 @@ Public Class StepD 'Instalador / Installer / FOUR
 
     Sub Continuar()
         UserClose = False
-        StepE.SetStatus("Instalacion finalizada correctamente.", 1)
+        If ReinstallMode = False Then
+            If UpdateMode = False Then
+                StepE.SetStatus("Instalación finalizada correctamente.", 1)
+            Else
+                StepE.SetStatus("Actualización finalizada correctamente.", 1)
+            End If
+        Else
+            StepE.SetStatus("Reinstalación finalizada correctamente.", 1)
+        End If
         SecureFormClose(StepE, Me)
     End Sub
 
@@ -75,11 +83,11 @@ Public Class StepD 'Instalador / Installer / FOUR
             Timer_StartDownload.Stop()
             Timer_StartDownload.Enabled = False
             btnNext.Enabled = False
-            btnNext.Text = "Downloading..."
             DownloaderURI = New Uri(AppStatus.Installer_BinDownload)
             DownloaderArray.DownloadFileAsync(DownloaderURI, zippedFilePath)
         Catch ex As Exception
             AddToInstallerLog("StartDownloadPacket@StepD", "Error: " & ex.Message, True)
+            CriticalError(Me, ex.Message)
         End Try
     End Sub
 
@@ -111,6 +119,7 @@ Public Class StepD 'Instalador / Installer / FOUR
             btnNext.Enabled = True
         Catch ex As Exception
             AddToInstallerLog("FinishedDownload@StepD", "Error: " & ex.Message, True)
+            CriticalError(Me, ex.Message)
         End Try
     End Sub
     Private Sub DownloaderArray_DownloadProgressChanged(sender As Object, e As DownloadProgressChangedEventArgs) Handles DownloaderArray.DownloadProgressChanged
@@ -178,9 +187,10 @@ Public Class StepD 'Instalador / Installer / FOUR
                 InstallFolder = Installer_InstallFolder
             End If
             InstallerRegistry = RegistroFinal
-            AddToInstallerLog("StepD", "Instalar en: " & InstallFolder & " Registrar en: " & InstallerRegistry, False)
+            AddToInstallerLog("StepD", "Instalacion en: " & InstallFolder & " Registrar en: " & InstallerRegistry, False)
         Catch ex As Exception
             AddToInstallerLog("WhereDoIInstall@StepD", "Error: " & ex.Message, True)
+            CriticalError(Me, ex.Message)
         End Try
     End Sub
     Sub UnZipPacket()
@@ -199,6 +209,7 @@ Public Class StepD 'Instalador / Installer / FOUR
             AddToInstallerLog("StepD", "Se han extraido los datos del paquete de instalacion a la carpeta temporal.", False)
         Catch ex As Exception
             AddToInstallerLog("UnZipPacket@StepD", "Error: " & ex.Message, True)
+            CriticalError(Me, ex.Message)
         End Try
     End Sub
     Sub CopyToInstallFolder()
@@ -213,6 +224,7 @@ Public Class StepD 'Instalador / Installer / FOUR
             My.Computer.FileSystem.CopyDirectory(extractFolderPath, InstallFolder, True)
         Catch ex As Exception
             AddToInstallerLog("CopyToInstallFolder@StepD", "Error: " & ex.Message, True)
+            CriticalError(Me, ex.Message)
         End Try
     End Sub
     Sub CreatePostInstallFiles()
@@ -247,6 +259,7 @@ Public Class StepD 'Instalador / Installer / FOUR
             AddToInstallerLog("StepD", "Se ha creado el asistente Post-Instalacion.", False)
         Catch ex As Exception
             AddToInstallerLog("CreatePresence@StepD", "Error: " & ex.Message, True)
+            CriticalError(Me, ex.Message)
         End Try
     End Sub
     Sub CreateInstallRegistry()
@@ -270,6 +283,7 @@ Public Class StepD 'Instalador / Installer / FOUR
                 AddToInstallerLog("StepD", "Se ha escrito en el registro: " & AppServiceRegWriter.ToString, False)
             Catch ex As Exception
                 AddToInstallerLog("CreateInstallRegistry(1)@StepD", "Error: " & ex.Message, True)
+                CriticalError(Me, ex.Message)
             End Try
             Try
                 'CREACION DEL REGISTRO PARA COMPATIBILIDAD  WorSupport>AppService>SignRegistry Y WorApps Y OTROS A NIVEL MAQUINA.
@@ -285,11 +299,13 @@ Public Class StepD 'Instalador / Installer / FOUR
                 InstallDataRegWriter.SetValue("Installed Date", DateAndTime.Today & " @ " & Format(DateAndTime.TimeOfDay, "hh") & ":" & Format(DateAndTime.TimeOfDay, "mm") & ":" & Format(DateAndTime.TimeOfDay, "ss") & ":" & Format(DateAndTime.TimeOfDay, "tt"), RegistryValueKind.String)
                 InstallDataRegWriter.SetValue("Last Start", DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss tt"), RegistryValueKind.String)
                 InstallDataRegWriter.SetValue("Directory", InstallFolder, RegistryValueKind.String)
-                InstallDataRegWriter.SetValue("AllUserCanUse", AllUsersInstall & ";" & Environment.UserName, RegistryValueKind.String)
+                InstallDataRegWriter.SetValue("AllUsersCanUse", AllUsersInstall & ";" & Environment.UserName, RegistryValueKind.String)
                 InstallDataRegWriter.SetValue("Assembly Path", InstallFolder & "\" & AssemblyName & ".exe", RegistryValueKind.String)
+                InstallDataRegWriter.SetValue("Install Registry", InstallerRegistry, RegistryValueKind.String)
                 AddToInstallerLog("StepD", "Se ha escrito en el registro: " & InstallDataRegWriter.ToString, False)
             Catch ex As Exception
                 AddToInstallerLog("CreateInstallRegistry(2)@StepD", "Error: " & ex.Message, True)
+                CriticalError(Me, ex.Message)
             End Try
             Try
                 'CREACION DEL REGISTRO DE INSTALACION.
@@ -316,11 +332,11 @@ Public Class StepD 'Instalador / Installer / FOUR
                 InstallRegWriter.SetValue("DisplayIcon", InstallFolder & "\" & AssemblyName & ".exe", RegistryValueKind.String)
                 InstallRegWriter.SetValue("DisplayName", AssemblyName, RegistryValueKind.String)
                 InstallRegWriter.SetValue("DisplayVersion", AppStatus.Assembly_Version, RegistryValueKind.String)
-                InstallRegWriter.SetValue("HelpLink", AppService.DIR_AppHelper & "/" & AssemblyName & ".html", RegistryValueKind.String)
+                InstallRegWriter.SetValue("HelpLink", ServerSwitch.DIR_AppHelper & "/" & AssemblyName & ".html", RegistryValueKind.String)
                 InstallRegWriter.SetValue("Publisher", "Worcome Studios", RegistryValueKind.String)
                 InstallRegWriter.SetValue("Contact", ServerSwitch.SW_UsingServer & "/Contacto.html", RegistryValueKind.String)
                 InstallRegWriter.SetValue("Readme", ServerSwitch.SW_UsingServer & "/readme.html", RegistryValueKind.String)
-                InstallRegWriter.SetValue("URLInfoAbout", AppService.DIR_AppHelper & "/AboutApps/" & AssemblyName & ".html", RegistryValueKind.String)
+                InstallRegWriter.SetValue("URLInfoAbout", ServerSwitch.DIR_AppHelper & "/AboutApps/" & AssemblyName & ".html", RegistryValueKind.String)
                 InstallRegWriter.SetValue("URLUpdateInfo", ServerSwitch.SW_UsingServer & "/AppsAssemblyInformation.html", RegistryValueKind.String)
                 Try
                     Dim TotalSizeVal As String = Val(PackageSize)
@@ -334,9 +350,11 @@ Public Class StepD 'Instalador / Installer / FOUR
                 AddToInstallerLog("StepD", "Se ha escrito en el registro: " & InstallRegWriter.ToString, False)
             Catch ex As Exception
                 AddToInstallerLog("CreateInstallRegistry(3)@StepD", "Error: " & ex.Message, True)
+                CriticalError(Me, ex.Message)
             End Try
         Catch ex As Exception
             AddToInstallerLog("CreateInstallRegistry(4)@StepD", "Error: " & ex.Message, True)
+            CriticalError(Me, ex.Message)
         End Try
     End Sub
     Sub ApplyInstructiveOptions()
@@ -366,6 +384,7 @@ Public Class StepD 'Instalador / Installer / FOUR
             End If
         Catch ex As Exception
             AddToInstallerLog("ApplyInstructiveOptions@StepD", "Error: " & ex.Message, True)
+            CriticalError(Me, ex.Message)
         End Try
     End Sub
 End Class

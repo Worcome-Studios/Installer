@@ -10,15 +10,11 @@ Module Telemetry
         Try
             AddToInstallerLog("TELEMETRY", "Creando telemetria...", True)
             TelemetryID = CreateIdentification("Identification")
-            Dim serialBoard As String = Nothing
+            Dim MotherboardSerial As String = GetMotherBoardID()
+            Dim CPUSerial As String = GetCpuID()
             If My.Computer.FileSystem.FileExists(DIRCommons & "\[" & TelemetryID & "]TLM_Installer" & AssemblyName & ".tlm") Then
                 My.Computer.FileSystem.DeleteFile(DIRCommons & "\[" & TelemetryID & "]TLM_Installer" & AssemblyName & ".tlm")
             End If
-            Dim serialDD As New ManagementObject("Win32_PhysicalMedia='\\.\PHYSICALDRIVE0'")
-            Dim serial As New ManagementObjectSearcher("root\CIMV2", "SELECT * FROM Win32_BaseBoard")
-            For Each serialB As ManagementObject In serial.Get()
-                serialBoard = (serialB.GetPropertyValue("SerialNumber").ToString)
-            Next
             AddToInstallerLog("TELEMETRY", " --- FIN DEL SERVICIO DE TELEMETRIA --- ", True)
             Dim TLM_Content As String
             TLM_Content = "#WorInstaller " & My.Application.Info.Version.ToString & " (" & Application.ProductVersion & ")" & " | " & AssemblyName & " " & AssemblyVersion & " | " & DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss tt") & " | Telemetry Installer" &
@@ -35,8 +31,12 @@ Module Telemetry
                                                 vbCrLf & "[Parameters]" &
                                                 vbCrLf & "IsSilentMode=" & isSilenced &
                                                 vbCrLf & "IsForceMode=" & isForced &
+                                                vbCrLf & "CanDowngrade=" & CanDowngrade &
                                                 vbCrLf & "InstallMode=" & InstallMode &
                                                 vbCrLf & "UpdateMode=" & UpdateMode &
+                                                vbCrLf & "UninstallMode=" & UninstallMode &
+                                                vbCrLf & "ReinstallMode=" & ReinstallMode &
+                                                vbCrLf & "AssistantMode=" & AssistantMode &
                                                 vbCrLf & "DowngradeForce=" & AppStatus.Installer_CanDowngrade &
                                                 vbCrLf & "AllUsersInstall=" & AllUsersInstall &
                                                 vbCrLf & "DownloadPackageFile=" & AppStatus.Installer_BinDownload &
@@ -59,17 +59,39 @@ Module Telemetry
                                                 vbCrLf & "Screen=" & My.Computer.Screen.Bounds.ToString & " (Area en Uso: " & My.Computer.Screen.WorkingArea.ToString & ")" &
                                                 vbCrLf & "Languaje=" & My.Computer.Info.InstalledUICulture.NativeName &
                                                 vbCrLf & "TimeAndDate=" & Format(DateAndTime.TimeOfDay, "hh") & ":" & Format(DateAndTime.TimeOfDay, "mm") & ":" & Format(DateAndTime.TimeOfDay, "ss") & Format(DateAndTime.TimeOfDay, "tt") & "@" & (DateAndTime.Today) &
-                                                vbCrLf & "MemoryDiskSerialNumber=" & serialDD.Properties("SerialNumber").Value.ToString &
-                                                vbCrLf & "SerialNumber=" & serialBoard & vbCrLf &
+                                                vbCrLf & "MotherboardSerial=" & MotherboardSerial &
+                                                vbCrLf & "CPUSerial=" & CPUSerial & vbCrLf &
                                                 vbCrLf & "[Log]" &
                                                 vbCrLf & "#Installer Log" & vbCrLf & InstallerLogContent
             SendTelemetry(TLM_Content, False)
         Catch ex As Exception
         End Try
     End Sub
+    Friend Function GetMotherBoardID() As String
+        Dim strMotherBoardID As String = Nothing
+        Dim query As New SelectQuery("Win32_BaseBoard")
+        Dim search As New ManagementObjectSearcher(query)
+        Dim info As ManagementObject
+        For Each info In search.Get()
+            strMotherBoardID = info("SerialNumber").ToString()
+        Next
+        Return strMotherBoardID
+    End Function
+    Function GetCpuID()
+        Dim cpuInfo As String = Nothing
+        Dim mc As New ManagementClass("win32_processor")
+        Dim moc As ManagementObjectCollection = mc.GetInstances
+        For Each mo As ManagementObject In moc
+            If cpuInfo = "" Then
+                cpuInfo = mo.Properties("processorID").Value.ToString
+                Exit For
+            End If
+        Next
+        Return cpuInfo
+    End Function
     Sub SendTelemetry(ByVal content As String, ByVal localCopy As Boolean)
         Try
-            Dim request As WebRequest = WebRequest.Create(AppService.DIR_Telemetry & "/postTelemetry.php")
+            Dim request As WebRequest = WebRequest.Create(ServerSwitch.DIR_Telemetry & "/postTelemetry.php")
             request.Method = "POST"
             Dim postData As String = "ident=" & My.Application.Info.AssemblyName & "_" & CreateIdentification("Identification") & "&log=" & content
             Dim byteArray As Byte() = Encoding.UTF8.GetBytes(postData)
@@ -160,6 +182,8 @@ Module PublicInformation
     Public InstallMode As Boolean = True 'Por defecto se intentara Instalar
     Public UpdateMode As Boolean = False
     Public UninstallMode As Boolean = False
+    Public ReinstallMode As Boolean = False
+    Public AssistantMode As Boolean = False
     Public isSilenced As Boolean
     Public isForced As Boolean
     Public CanDowngrade As Boolean = False
@@ -188,9 +212,6 @@ Module StartUp
         SetSubVariables()
         'ACCIONES COMUNES
         CommonActions()
-        'LLAMADA A AppService PARA CARGAR LOS DATOS DEL ENSAMBLADO
-        AddToInstallerLog("StartUp", "Iniciando AppService...", False)
-        AppService.StartAppService(False, False, False, True, AssemblyName, AssemblyVersion)
         'COMENZAMOS EL PROCESO DE INSTALACION
         StartPreInstallProcess()
     End Sub
@@ -269,10 +290,15 @@ Module PreInstall
     End Sub
 
     Sub StarInstallProcess()
+        'LLAMADA A AppService PARA CARGAR LOS DATOS DEL ENSAMBLADO
+        AddToInstallerLog("StartUp", "Iniciando AppService...", False)
+        AppService.StartAppService(False, False, False, True, AssemblyName, AssemblyVersion)
         AddToInstallerLog("PreInstall", "Comenzando el proceso de instalacion...", False)
         Try
             'COMIENZA EL PROCESO DE INSTALACION.
             InstallMode = True
+            UninstallMode = False
+            UpdateMode = False
             StepA.Show()
             StepA.Focus()
             StepA.BringToFront()
@@ -283,7 +309,12 @@ Module PreInstall
 
     Sub StartAssistant()
         AddToInstallerLog("PreInstall", "Iniciando el asistente...", False)
+        Debugger.StartFromAnotherLocation()
         Try
+            AssistantMode = True
+            InstallMode = False
+            'UninstallMode = False
+            UpdateMode = False
             Asistente.Show()
             Asistente.Focus()
             Asistente.BringToFront()
@@ -327,6 +358,16 @@ Module GeneralUses
         End Try
     End Sub
 
+    Sub CriticalError(ByVal fromForm As Form, ByVal theError As String)
+        Try
+            AddToInstallerLog("CriticalError", "Error critico. (" & fromForm.Text & ", " & theError & ")", True)
+            SecureFormClose(StepE, fromForm)
+            StepE.SetStatus(theError, 0)
+        Catch ex As Exception
+            AddToInstallerLog("CriticalError@GeneralUses", "Error: " & ex.Message, True)
+        End Try
+    End Sub
+
     Sub AppServiceHasFinished()
         Try
             AddToInstallerLog("AppServiceHasFinished", "En general, AppService ha terminado.", False)
@@ -334,6 +375,9 @@ Module GeneralUses
             AssemblyVersion = AppStatus.Assembly_Version
             AppImageLocation = ServerSwitch.SW_UsingServer & "/images/AppsImage/Icons/" & AssemblyPackageName & ".png"
             StepB.rbAccept.Enabled = True
+            If UpdateMode Then
+                Asistente.CheckIfUpdate()
+            End If
         Catch ex As Exception
             AddToInstallerLog("AppServiceHasFinished@GeneralUses", "Error: " & ex.Message, True)
         End Try

@@ -47,8 +47,8 @@
     Sub LoadData()
         Try
             lblAssemblyInfo.Text = "La version a instalar es la " & AppStatus.Assembly_Version & " encontrada en el servidor."
-            AddToInstallerLog("StepC", "Se cargo la informacion del ensamblado desde: " & AppService.DIR_AppHelper & "/AboutApps/" & AssemblyName & ".html", False)
-            WebBrowser1.Navigate(AppService.DIR_AppHelper & "/AboutApps/" & AssemblyName & ".html")
+            AddToInstallerLog("StepC", "Se cargo la informacion del ensamblado desde: " & ServerSwitch.DIR_AppHelper & "/AboutApps/" & AssemblyName & ".html", False)
+            WebBrowser1.Navigate(ServerSwitch.DIR_AppHelper & "/AboutApps/" & AssemblyName & ".html")
             cbAllUserCanUse.Checked = AllUsersInstall
         Catch ex As Exception
             AddToInstallerLog("LoadData@StepC", "Error: " & ex.Message, False)

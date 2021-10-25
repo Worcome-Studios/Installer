@@ -189,7 +189,7 @@ Partial Class StepC
         Me.MinimumSize = New System.Drawing.Size(655, 551)
         Me.Name = "StepC"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Wor Installer"
+        Me.Text = "Assembly Information | WorInstaller"
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PIC_IMG_Icon, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)

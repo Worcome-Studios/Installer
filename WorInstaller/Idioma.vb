@@ -53,11 +53,23 @@
 
                 Shared Sub AfterLoad()
                     If AppLanguage = 1 Then
-                        StepB.Text = AssemblyName & " - Installer | Acuerdo con el Usuario @ Wor Installer"
+                        If ReinstallMode = False Then
+                            StepB.Text = AssemblyName & " - Installer | Acuerdo con el Usuario @ Wor Installer"
+                        Else
+                            StepB.Text = AssemblyName & " - Reinstaller | Acuerdo con el Usuario @ Wor Installer"
+                        End If
                     Else
-                        StepB.Text = AssemblyName & " - Installer | User Agreement @ Wor Installer"
+                        If ReinstallMode = False Then
+                            StepB.Text = AssemblyName & " - Installer | Acuerdo con el Usuario @ Wor Installer"
+                        Else
+                            StepB.Text = AssemblyName & " - Reinstaller | Acuerdo con el Usuario @ Wor Installer"
+                        End If
                     End If
-                    StepB.lblTitle.Text = AssemblyPackageName & " - Installer"
+                    If ReinstallMode = False Then
+                        StepB.lblTitle.Text = AssemblyPackageName & " - Installer"
+                    Else
+                        StepB.lblTitle.Text = AssemblyPackageName & " - Reinstaller"
+                    End If
                 End Sub
             End Class
         End Class
@@ -100,23 +112,55 @@
                 End Sub
 
                 Shared Sub AfterLoad()
-                    StepD.Text = AssemblyName & " " & AssemblyVersion & " - Installer"
-                    StepD.lblTitle.Text = AssemblyPackageName & " - Installer"
-                    If AppLanguage = 1 Then
-                        StepD.lblBody.Text = "Descarga e Instalación en curso" &
-                                        vbCrLf & "El instalador descargará e instalará el programa." &
-                                        vbCrLf & "Puede seguir utilizando su Equipo con normalidad."
-                    Else
-                        StepD.lblBody.Text = "Installation in progress" &
-                                            vbCrLf & "The installer will download and install the program." &
-                                            vbCrLf & "You can continue using your PC normally."
-                    End If
-                    If InstallMode = True Then
-                        If AppLanguage = 1 Then
-                            StepD.btnNext.Text = "Descargando..."
+                    If ReinstallMode = False Then
+                        If UpdateMode = False Then
+                            StepD.Text = AssemblyName & " " & AssemblyVersion & " - Installer"
+                            StepD.lblTitle.Text = AssemblyPackageName & " - Installer"
                         Else
-                            StepD.btnNext.Text = "Downloading..."
+                            StepD.Text = AssemblyName & " " & AssemblyVersion & " - Updater"
+                            StepD.lblTitle.Text = AssemblyPackageName & " - Updater"
                         End If
+                    Else
+                        StepD.Text = AssemblyName & " " & AssemblyVersion & " - Reinstaller"
+                        StepD.lblTitle.Text = AssemblyPackageName & " - Reinstaller"
+                    End If
+                    If AppLanguage = 1 Then
+                        If ReinstallMode = False Then
+                            If UpdateMode = False Then
+                                StepD.lblBody.Text = "Descarga e Instalación en curso" &
+                                    vbCrLf & "El instalador descargará e instalará el programa." &
+                                    vbCrLf & "Puede seguir utilizando su Equipo con normalidad."
+                            Else
+                                StepD.lblBody.Text = "Descarga y Actualización en curso" &
+                                    vbCrLf & "El instalador descargará y actualizará el programa." &
+                                    vbCrLf & "Puede seguir utilizando su Equipo con normalidad."
+                            End If
+                        Else
+                            StepD.lblBody.Text = "Reinstalación en curso" &
+                                vbCrLf & "No desconecte el equipo ni lo apague durante la instalación." &
+                                vbCrLf & "Mantenga el equipo conectado a un punto de acceso a Internet." &
+                                vbCrLf & "Todos los componentes serán Reinstalados."
+                        End If
+                    Else
+                        If ReinstallMode = False Then
+                            If UpdateMode = False Then
+                                StepD.lblBody.Text = "Installation in progress" &
+                                    vbCrLf & "You can continue using your PC normally."
+                            Else
+                                StepD.lblBody.Text = "Update in progress" &
+                                    vbCrLf & "You can continue using your PC normally."
+                            End If
+                        Else
+                            StepD.lblBody.Text = "Reinstallation in progress" &
+                                vbCrLf & "Do not disconnect the PC or turn it off during installation." &
+                                vbCrLf & "Keep the computer connected to an Internet access point." &
+                                vbCrLf & "All components will be Reinstalled."
+                        End If
+                    End If
+                    If AppLanguage = 1 Then
+                        StepD.btnNext.Text = "Descargando..."
+                    Else
+                        StepD.btnNext.Text = "Downloading..."
                     End If
                 End Sub
             End Class
@@ -147,8 +191,54 @@
                 End Sub
 
                 Shared Sub AfterLoad()
-                    StepE.Text = AssemblyName & " " & AssemblyVersion & " - Installer"
-                    StepE.lblTitle.Text = AssemblyPackageName & " - Installer"
+                    StepE.Text = AssemblyName & " " & AssemblyVersion
+                    StepE.lblTitle.Text = AssemblyPackageName
+                End Sub
+            End Class
+        End Class
+
+        Public Class Assistant
+            Public Class OnLoad
+                Shared Sub ESP()
+                    Asistente.btnExit.Text = "< Salir"
+                    Asistente.lblBody.Text = "Asistente de post-instalación" & vbCrLf & vbCrLf & "   Elija una opción"
+                    Asistente.lblReinstall.Text = "Una reinstalación completa, el instalador no limpiara datos del usuario"
+                    Asistente.lblUninstall.Text = "Elimina el programa de tu ordenador"
+                    Asistente.lblReset.Text = "Restauracion de fabrica, elimina todos sus archivos vinculados" & vbCrLf & "Eliminara bases de datos, datos del usuario, etc"
+                    Asistente.lblSearchUpdates.Text = "Busca actualizaciones disponibles en el servidor"
+                    Asistente.lblUpdate.Text = "Actualizar el programa a su versión más reciente"
+                    Asistente.btnReinstall.Text = "Reinstalar"
+                    Asistente.btnUninstall.Text = "Desinstalar"
+                    Asistente.btnReset.Text = "Resetear"
+                    Asistente.btnSearchUpdates.Text = "Buscar actualizaciones"
+                    Asistente.btnUpdate.Text = "Actualizar"
+                    Asistente.llblAbout.Text = "Ver About"
+                    Asistente.llblUseGuide.Text = "Ver Guía de uso"
+                End Sub
+
+                Shared Sub ENG()
+                    Asistente.btnExit.Text = "< Exit"
+                    Asistente.lblBody.Text = "Post-installation wizard" & vbCrLf & vbCrLf & "    Choose an option"
+                    Asistente.lblReinstall.Text = "Reinstall the program and delete all its linked files" & vbCrLf & "Delete databases, user data, etc."
+                    Asistente.lblUninstall.Text = "Delete the program from your computer"
+                    Asistente.lblReset.Text = "A complete reinstall, the installer will not wipe user data"
+                    Asistente.lblSearchUpdates.Text = "Check for available updates on the server"
+                    Asistente.lblUpdate.Text = "Update the program to its latest version"
+                    Asistente.btnReinstall.Text = "Reinstall"
+                    Asistente.btnUninstall.Text = "Uninstall"
+                    Asistente.btnReset.Text = "Reset"
+                    Asistente.btnSearchUpdates.Text = "Search for updates"
+                    Asistente.btnUpdate.Text = "Update"
+                    Asistente.llblAbout.Text = "See About"
+                    Asistente.llblUseGuide.Text = "See Usage guide"
+                End Sub
+
+                Shared Sub AfterLoad()
+                    If AppLanguage = 1 Then
+                        Asistente.lblTitle.Text = AssemblyPackageName & " - Asistente"
+                    Else
+                        Asistente.lblTitle.Text = AssemblyPackageName & " - Assistant"
+                    End If
                 End Sub
             End Class
         End Class

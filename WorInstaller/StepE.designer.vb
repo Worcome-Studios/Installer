@@ -243,7 +243,7 @@ Partial Class StepE
         Me.MaximizeBox = False
         Me.Name = "StepE"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Wor Installer"
+        Me.Text = "Conclusion | WorInstaller"
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PIC_IMG_Icon, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
