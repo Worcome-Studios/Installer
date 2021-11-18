@@ -13,6 +13,11 @@
             PIC_IMG_Icon.ImageLocation = AppImageLocation
         End If
         LoadData()
+        If isSilenced Then
+            Me.Hide()
+            Threading.Thread.Sleep(150)
+            Continuar()
+        End If
     End Sub
     Private Sub StepC_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         If UserClose Then

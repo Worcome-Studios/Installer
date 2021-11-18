@@ -2,6 +2,8 @@
     Public UserClose As Boolean = True
 
     Private Sub StepA_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Me.CenterToScreen()
+        Dim StartBlinkForFocus = WindowsApi.FlashWindow(Process.GetCurrentProcess().MainWindowHandle, True, True, 5)
         AddToInstallerLog("StepA", "Step A Iniciado! " & DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss tt"), False)
         If AppLanguage = 1 Then
             Idioma.Forms.Main.OnLoad.ESP()
@@ -10,7 +12,11 @@
         End If
         Idioma.Forms.Main.OnLoad.AfterLoad()
         Me.BringToFront()
-        Dim StartBlinkForFocus = WindowsApi.FlashWindow(Process.GetCurrentProcess().MainWindowHandle, True, True, 5)
+        If isSilenced Then
+            Me.Hide()
+            Threading.Thread.Sleep(150)
+            Continuar()
+        End If
     End Sub
     Private Sub StepA_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         If UserClose Then

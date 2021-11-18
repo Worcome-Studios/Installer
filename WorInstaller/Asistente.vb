@@ -37,7 +37,10 @@ Public Class Asistente
             picAppIcon.Visible = False
         End Try
         GetRegistry()
-        rtbLog.Text &= "WorInstaller " & My.Application.Info.Version.ToString
+        rtbLog.SelectionColor = Color.Gray
+        rtbLog.AppendText("WorInstaller " & My.Application.Info.Version.ToString & " (" & Application.ProductVersion & ")")
+        rtbLog.SelectionColor = Color.Black
+        rtbLog.ScrollToCaret()
         If UninstallMode = True Then
             Uninstall()
         End If
@@ -97,7 +100,8 @@ Public Class Asistente
     Sub Reinstall()
         Try
             If MessageBox.Show("¿Want to reinstall '" & AssemblyRegistry.GetValue("Assembly") & "'?", "Worcome Security", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
-                rtbLog.Text &= vbCrLf & "Starting reinstall process..."
+                rtbLog.AppendText(vbCrLf & "Starting reinstall process...")
+                rtbLog.ScrollToCaret()
                 UserClose = False
                 ReinstallMode = True
                 InstallMode = False
@@ -114,10 +118,11 @@ Public Class Asistente
     Sub Uninstall()
         Try
             If MessageBox.Show("¿Want to uninstall '" & AssemblyRegistry.GetValue("Assembly") & "' de su equipo?", "Worcome Security", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
-                rtbLog.Text &= vbCrLf & "Starting uninstall process..."
+                rtbLog.AppendText(vbCrLf & "Starting uninstall process...")
+                rtbLog.ScrollToCaret()
                 Try
                     'ELIMINAR CARPETA DE INSTALACION Y DIRCommons
-                    rtbLog.Text &= vbCrLf & "Deleting installation folder..."
+                    rtbLog.AppendText(vbCrLf & "Deleting installation folder...")
                     If My.Computer.FileSystem.DirectoryExists(AssemblyRegistry.GetValue("Directory")) = True Then
                         My.Computer.FileSystem.DeleteDirectory(AssemblyRegistry.GetValue("Directory"), FileIO.DeleteDirectoryOption.DeleteAllContents)
                     End If
@@ -129,7 +134,8 @@ Public Class Asistente
                 End Try
                 Try
                     'ELIMINA LOS ARCHIVOS DEL PROGRAMA
-                    rtbLog.Text &= vbCrLf & "Deleting programa configuration directory..."
+                    rtbLog.AppendText(vbCrLf & "Deleting programa configuration directory...")
+                    rtbLog.ScrollToCaret()
                     If My.Computer.FileSystem.DirectoryExists("C:\Users\" & Environment.UserName & "\AppData\Local\Worcome_Studios\Commons\Apps\" & AssemblyName) = True Then
                         My.Computer.FileSystem.DeleteDirectory("C:\Users\" & Environment.UserName & "\AppData\Local\Worcome_Studios\Commons\Apps\" & AssemblyName, FileIO.DeleteDirectoryOption.DeleteAllContents)
                     End If
@@ -177,7 +183,8 @@ Public Class Asistente
                 End Try
                 Try
                     'ELIMINA EL REGISTRO DE INSTALACION
-                    rtbLog.Text &= vbCrLf & "Deleting installation registry..."
+                    rtbLog.AppendText(vbCrLf & "Deleting installation registry...")
+                    rtbLog.ScrollToCaret()
                     Dim RegistryRemover As RegistryKey = Registry.LocalMachine.OpenSubKey(AssemblyRegistry.GetValue("Install Registry"), True)
                     If RegistryRemover IsNot Nothing Then
                         Registry.LocalMachine.DeleteSubKeyTree(AssemblyRegistry.GetValue("Install Registry"))
@@ -187,7 +194,8 @@ Public Class Asistente
                 End Try
                 Try
                     'ELIMINAR ACCESO DIRECTO DE Program
-                    rtbLog.Text &= vbCrLf & "Deleting direct access files..."
+                    rtbLog.AppendText(vbCrLf & "Deleting direct access files...")
+                    rtbLog.ScrollToCaret()
                     Dim AppFolder_Inicio As String
                     AppFolder_Inicio = Environment.GetFolderPath(Environment.SpecialFolder.Programs) & "\Worcome Studios\Worcome Apps\" & AssemblyPackageName
                     My.Computer.FileSystem.DeleteDirectory(AppFolder_Inicio, FileIO.DeleteDirectoryOption.DeleteAllContents)
@@ -201,7 +209,8 @@ Public Class Asistente
                 End Try
                 Try
                     'ELIMINAR REGISTRO CurrentUser de SignRegistry
-                    rtbLog.Text &= vbCrLf & "Deleting SignRegistry (CurrentUser)..."
+                    rtbLog.AppendText(vbCrLf & "Deleting SignRegistry (CurrentUser)...")
+                    rtbLog.ScrollToCaret()
                     Dim RegistryRemover As RegistryKey
                     RegistryRemover = Registry.CurrentUser.OpenSubKey("Software\\Worcome_Studios\\" & AssemblyName, True)
                     If RegistryRemover IsNot Nothing Then
@@ -222,7 +231,8 @@ Public Class Asistente
                 End Try
                 Try
                     'ELIMINAR REGISTRO LocalMachine de SignRegistry
-                    rtbLog.Text &= vbCrLf & "Deleting SignRegistry (LocalMachine)..."
+                    rtbLog.AppendText(vbCrLf & "Deleting SignRegistry (LocalMachine)...")
+                    rtbLog.ScrollToCaret()
                     Dim RegistryRemover As RegistryKey
                     RegistryRemover = Registry.LocalMachine.OpenSubKey("Software\\Worcome_Studios\\" & AssemblyName, True)
                     If RegistryRemover IsNot Nothing Then
@@ -238,7 +248,8 @@ Public Class Asistente
                 Catch ex As Exception
                     AddToInstallerLog("Uninstall(9)@Asistente", "Error: " & ex.Message, True)
                 End Try
-                rtbLog.Text &= vbCrLf & "Uninstall complete..."
+                rtbLog.AppendText(vbCrLf & "Uninstall complete...")
+                rtbLog.ScrollToCaret()
                 If AppLanguage = 1 Then
                     MsgBox("Desinstalación completa", MsgBoxStyle.Information, "Worcome Security")
                     If MessageBox.Show("¿Quiere completar una pequeña encuesta?" & vbCrLf & "Nos ayudaría mucho saber su opinión", "Worcome Community", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
@@ -251,7 +262,8 @@ Public Class Asistente
                     End If
                 End If
                 'CreateTelemetry()
-                rtbLog.Text &= vbCrLf & "Closing..."
+                rtbLog.AppendText(vbCrLf & "Closing...")
+                rtbLog.ScrollToCaret()
                 End 'END_PROGRAM
             End If
         Catch ex As Exception
@@ -260,7 +272,8 @@ Public Class Asistente
     End Sub
     Sub Reset()
         Try
-            rtbLog.Text &= vbCrLf & "Starting reset process..."
+            rtbLog.AppendText(vbCrLf & "Starting reset process...")
+            rtbLog.ScrollToCaret()
             Process.Start(AssemblyRegistry.GetValue("Assembly Path"), "/FactoryReset")
         Catch ex As Exception
             AddToInstallerLog("Reset@Asistente", "Error: " & ex.Message, True)
@@ -271,7 +284,8 @@ Public Class Asistente
             AddToInstallerLog("Asistente", "Iniciando AppService...", False)
             UpdateMode = True
             AppService.StartAppService(False, False, False, True, AssemblyName, AssemblyRegistry.GetValue("Version"))
-            rtbLog.Text &= vbCrLf & "Searching for updates..."
+            rtbLog.AppendText(vbCrLf & "Searching for updates...")
+            rtbLog.ScrollToCaret()
         Catch ex As Exception
             AddToInstallerLog("SearchUpdates@Asistente", "Error: " & ex.Message, True)
         End Try
@@ -282,7 +296,7 @@ Public Class Asistente
         Dim versionLocal = New Version(AssemblyRegistry.GetValue("Version"))
         Dim versionServidor = New Version(Assembly_Version)
         Dim result = versionLocal.CompareTo(versionServidor)
-        rtbLog.Text &= vbCrLf & "Server: " & Assembly_Version & "    Local: " & versionLocal.ToString
+        rtbLog.AppendText(vbCrLf & "Server: " & Assembly_Version & "    Local: " & versionLocal.ToString)
         rtbLog.ScrollToCaret()
         If (result < 0) Then
             If AppLanguage = 1 Then
@@ -306,7 +320,8 @@ Public Class Asistente
     End Sub
     Sub UpdateIt()
         Try
-            rtbLog.Text &= vbCrLf & "Starting update process..."
+            rtbLog.AppendText(vbCrLf & "Starting update process...")
+            rtbLog.ScrollToCaret()
             UserClose = False
             ReinstallMode = False
             InstallMode = False

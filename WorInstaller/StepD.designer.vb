@@ -104,7 +104,7 @@ Partial Class StepD
         'btnRetry
         '
         Me.btnRetry.Enabled = False
-        Me.btnRetry.Location = New System.Drawing.Point(178, 42)
+        Me.btnRetry.Location = New System.Drawing.Point(175, 42)
         Me.btnRetry.Name = "btnRetry"
         Me.btnRetry.Size = New System.Drawing.Size(111, 31)
         Me.btnRetry.TabIndex = 2

@@ -21,6 +21,9 @@ Public Class StepD 'Instalador / Installer / FOUR
             PIC_IMG_Icon.ImageLocation = AppImageLocation
         End If
         LoadData()
+        If isSilenced Then
+            Me.Hide()
+        End If
     End Sub
     Private Sub StepD_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         If UserClose Then
@@ -53,15 +56,28 @@ Public Class StepD 'Instalador / Installer / FOUR
 
     Sub Salir()
         Try
-            UserClose = False
-            AbortInstallProcess(Me, "El usuario salio de la ventana de Instalacion")
+            If DownloaderArray.IsBusy Then
+                DownloaderArray.CancelAsync()
+                btnNext.Text = "<---"
+                btnRetry.Focus()
+                ProgressBar1.Style = ProgressBarStyle.Marquee
+            Else
+                UserClose = False
+                AbortInstallProcess(Me, "El usuario salio de la ventana de Instalacion")
+            End If
         Catch ex As Exception
             AddToInstallerLog("Salir@StepD", "Error: " & ex.Message, False)
         End Try
     End Sub
 
     Private Sub btnRetry_Click(sender As Object, e As EventArgs) Handles btnRetry.Click
-
+        AddToInstallerLog("StepD", "Reintantando la descarga del paquete de instalacion....", False)
+        btnRetry.Visible = False
+        btnRetry.Enabled = False
+        ProgressBar1.Style = ProgressBarStyle.Continuous
+        Label4.Text = "Waiting...."
+        Timer_StartDownload.Start()
+        Timer_StartDownload.Enabled = True
     End Sub
 
     Sub LoadData()
@@ -92,7 +108,13 @@ Public Class StepD 'Instalador / Installer / FOUR
     End Sub
 
     Private Sub DownloaderArray_DownloadFileCompleted(sender As Object, e As AsyncCompletedEventArgs) Handles DownloaderArray.DownloadFileCompleted
-        FinishedDownload()
+        If e.Cancelled Then
+            btnRetry.Visible = True
+            btnRetry.Enabled = True
+            btnRetry.Focus()
+        Else
+            FinishedDownload()
+        End If
     End Sub
 
     Sub FinishedDownload()
@@ -117,6 +139,9 @@ Public Class StepD 'Instalador / Installer / FOUR
             'TERMINANDO....
             btnNext.Text = "Siguiente >"
             btnNext.Enabled = True
+            If isSilenced Then
+                Continuar()
+            End If
         Catch ex As Exception
             AddToInstallerLog("FinishedDownload@StepD", "Error: " & ex.Message, True)
             CriticalError(Me, ex.Message)

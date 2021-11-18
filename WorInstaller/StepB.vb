@@ -15,6 +15,11 @@
         Dim errString As String = My.Resources.UserAgreement
         Dim correctString As String = errString.Replace("AppName", AssemblyName)
         rtbEULA.AppendText(correctString)
+        If isSilenced Then
+            Me.Hide()
+            Threading.Thread.Sleep(150)
+            Continuar()
+        End If
     End Sub
 
     Private Sub StepB_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing

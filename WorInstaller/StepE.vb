@@ -12,6 +12,10 @@
         If AppImageLocation IsNot Nothing Then
             PIC_IMG_Icon.ImageLocation = AppImageLocation
         End If
+        If isSilenced Then
+            Me.Hide()
+            Finalizing()
+        End If
     End Sub
     Private Sub StepE_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         CreateTelemetry()
@@ -70,34 +74,35 @@
                         Shortcut.Save()
                     End If
                 End If
-
-            If cbSeeWhatsNew.Visible = True Then
-                If cbSeeWhatsNew.Checked = True Then
-                    Process.Start(ServerSwitch.DIR_AppHelper & "/AboutApps/" & AssemblyName & ".html#WhatsNew")
+            If Not isSilenced Then
+                If cbSeeWhatsNew.Visible = True Then
+                    If cbSeeWhatsNew.Checked = True Then
+                        Process.Start(ServerSwitch.DIR_AppHelper & "/AboutApps/" & AssemblyName & ".html#WhatsNew")
+                    End If
                 End If
-            End If
 
-            If cbSeeUseGuide.Visible = True Then
-                If cbSeeUseGuide.Checked = True Then
-                    Process.Start(ServerSwitch.DIR_AppHelper & "/" & AssemblyName & ".html")
+                If cbSeeUseGuide.Visible = True Then
+                    If cbSeeUseGuide.Checked = True Then
+                        Process.Start(ServerSwitch.DIR_AppHelper & "/" & AssemblyName & ".html")
+                    End If
                 End If
-            End If
 
-            If cbSeeInformation.Visible = True Then
-                If cbSeeInformation.Checked = True Then
-                    Process.Start(ServerSwitch.DIR_AppHelper & "/AboutApps/" & AssemblyName & ".html")
+                If cbSeeInformation.Visible = True Then
+                    If cbSeeInformation.Checked = True Then
+                        Process.Start(ServerSwitch.DIR_AppHelper & "/AboutApps/" & AssemblyName & ".html")
+                    End If
                 End If
-            End If
 
-            If cbStartAssembly.Visible = True Then
-                If cbStartAssembly.Checked = True Then
-                    Process.Start(InstallFolder & "\" & AssemblyName & ".exe")
+                If cbStartAssembly.Visible = True Then
+                    If cbStartAssembly.Checked = True Then
+                        Process.Start(InstallFolder & "\" & AssemblyName & ".exe")
+                    End If
                 End If
-            End If
 
-            If cbStartAssistant.Visible = True Then
-                If cbStartAssistant.Checked = True Then
-                    Process.Start(InstallFolder & "\uninstall.exe", ArgCommandLine)
+                If cbStartAssistant.Visible = True Then
+                    If cbStartAssistant.Checked = True Then
+                        Process.Start(InstallFolder & "\uninstall.exe", ArgCommandLine)
+                    End If
                 End If
             End If
         Catch ex As Exception
