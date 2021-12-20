@@ -26,10 +26,14 @@ Public Class StepD 'Instalador / Installer / FOUR
         End If
     End Sub
     Private Sub StepD_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
-        If UserClose Then
-            UserClose = False
-            AbortInstallProcess(Me, "El usuario cerro la ventana de Instalacion")
-            'End 'END_PROGRAM
+        If btnNext.Text = "Siguiente >" Then
+            Continuar()
+        Else
+            If UserClose Then
+                UserClose = False
+                AbortInstallProcess(Me, "El usuario cerro la ventana de Instalacion")
+                'SecureCloseAll()
+            End If
         End If
     End Sub
 
@@ -94,7 +98,15 @@ Public Class StepD 'Instalador / Installer / FOUR
     End Sub
 
     Sub StartDownloadPacket()
-        AddToInstallerLog("StepD", "Comenzo la descarga del paquete de instalacion...", False)
+        AddToInstallerLog("StepD", "Comenzo la descarga del paquete de instalacion..." &
+                          vbCrLf & "    BinDownload: " & Installer_BinDownload &
+                          vbCrLf & "    InsDownload: " & Installer_InsDownload &
+                          vbCrLf & "    CanDowngrade: " & Installer_CanDowngrade &
+                          vbCrLf & "    NeedStartUp: " & Installer_NeedStartUp &
+                          vbCrLf & "    NeedRestart: " & Installer_NeedRestart &
+                          vbCrLf & "    NeedElevateAccess: " & Installer_NeedElevateAccess &
+                          vbCrLf & "    InstallFolder: " & Installer_InstallFolder &
+                          vbCrLf & "    BitArch: " & Installer_BitArch, False)
         Try
             Timer_StartDownload.Stop()
             Timer_StartDownload.Enabled = False
@@ -120,27 +132,32 @@ Public Class StepD 'Instalador / Installer / FOUR
     Sub FinishedDownload()
         AddToInstallerLog("StepD", "Finalizo la descarga del paquete de instalacion.", False)
         Try
-            btnNext.Enabled = False
-            btnExit.Enabled = False
-            ProgressBar1.Value = 100
-            btnNext.Text = "Instalando..."
-            'DEFINE DONDE SE INSTALARA
-            WhereDoIInstall()
-            'EXTRAER LOS DATOS PARA LA INSTALACION
-            UnZipPacket()
-            'COPIAR LO DESCOMPRIMIDO A LA CARPETA DE INSTALACION
-            CopyToInstallFolder()
-            'CREACION DEL POST-INSTALACION
-            CreatePostInstallFiles()
-            'CREACION DEL REGISTRO
-            CreateInstallRegistry()
-            'APLICAR OPCIONES DEL INSTRUCTIVO
-            ApplyInstructiveOptions()
-            'TERMINANDO....
-            btnNext.Text = "Siguiente >"
-            btnNext.Enabled = True
-            If isSilenced Then
-                Continuar()
+            'Verificar que el software no se este ejecutando
+            If IsProccessRunning(IO.Path.GetFileNameWithoutExtension(ExecutableFile)) Then
+                AbortInstallProcess(Me, "No se puede realizar la instalacion con el programa ejecutandose.")
+            Else
+                btnNext.Enabled = False
+                btnExit.Enabled = False
+                ProgressBar1.Value = 100
+                btnNext.Text = "Instalando..."
+                'DEFINE DONDE SE INSTALARA
+                WhereDoIInstall()
+                'EXTRAER LOS DATOS PARA LA INSTALACION
+                UnZipPacket()
+                'COPIAR LO DESCOMPRIMIDO A LA CARPETA DE INSTALACION
+                CopyToInstallFolder()
+                'CREACION DEL POST-INSTALACION
+                CreatePostInstallFiles()
+                'CREACION DEL REGISTRO
+                CreateInstallRegistry()
+                'APLICAR OPCIONES DEL INSTRUCTIVO
+                ApplyInstructiveOptions()
+                'TERMINANDO....
+                btnNext.Text = "Siguiente >"
+                btnNext.Enabled = True
+                If isSilenced Then
+                    Continuar()
+                End If
             End If
         Catch ex As Exception
             AddToInstallerLog("FinishedDownload@StepD", "Error: " & ex.Message, True)
@@ -196,7 +213,7 @@ Public Class StepD 'Instalador / Installer / FOUR
                 'UPA. NO SE PUEDE INSTALAR.
                 If isSilenced = False Then
                     MsgBox("El programa por instalar requiere de un Sistema Operativo y un Procesador de 64bits y no de 32bits", MsgBoxStyle.Critical, "No se puede instalar")
-                    End 'END_PROGRAM
+                    SecureCloseAll()
                 End If
             ElseIf ProcessorArch = 64 And Installer_BitArch = 64 Then 'PC = 64, PROGRAMA = 64
                 UbicacionFinal = "C:\Program Files" & Installer_InstallFolder
@@ -369,9 +386,9 @@ Public Class StepD 'Instalador / Installer / FOUR
                 Catch
                 End Try
                 InstallRegWriter.SetValue("ModifyPath", InstallFolder & "\uninstall.exe /Installer.Package.Set=" & AssemblyName & "," & AssemblyVersion, RegistryValueKind.ExpandString)
-                InstallRegWriter.SetValue("UninstallPath", InstallFolder & "\uninstall.exe" & " /Uninstall /Installer.Package.Set=" & AssemblyName & "," & AssemblyVersion, RegistryValueKind.ExpandString)
-                InstallRegWriter.SetValue("UninstallString", """" & InstallFolder & "\uninstall.exe" & """" & " /Uninstall /Installer.Package.Set=" & AssemblyName & "," & AssemblyVersion, RegistryValueKind.ExpandString)
-                InstallRegWriter.SetValue("QuietUninstallString", """" & InstallFolder & "\uninstall.exe" & """" & " /S /Uninstall /Installer.Package.Set=" & AssemblyName & "," & AssemblyVersion, RegistryValueKind.String)
+                InstallRegWriter.SetValue("UninstallPath", InstallFolder & "\uninstall.exe" & " /uninstall /Installer.Package.Set=" & AssemblyName & "," & AssemblyVersion, RegistryValueKind.ExpandString)
+                InstallRegWriter.SetValue("UninstallString", """" & InstallFolder & "\uninstall.exe" & """" & " /uninstall /Installer.Package.Set=" & AssemblyName & "," & AssemblyVersion, RegistryValueKind.ExpandString)
+                InstallRegWriter.SetValue("QuietUninstallString", """" & InstallFolder & "\uninstall.exe" & """" & " -S /uninstall /Installer.Package.Set=" & AssemblyName & "," & AssemblyVersion, RegistryValueKind.String)
                 AddToInstallerLog("StepD", "Se ha escrito en el registro: " & InstallRegWriter.ToString, False)
             Catch ex As Exception
                 AddToInstallerLog("CreateInstallRegistry(3)@StepD", "Error: " & ex.Message, True)

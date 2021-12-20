@@ -26,7 +26,7 @@
                     StepA.lblTitle.Text = AssemblyPackageName & " - Installer"
                     If AppLanguage = 1 Then
                         StepA.lblBody.Text = "Seleccione el método de instalación: Online para una instalación actualizada u Offline para una instalación dependiendo del paquete de instalación contenida en el Instalador." &
-                            vbCrLf & vbCrLf & "Recomendamos no dar clic en 'Siguiente >' como un si no hubiese mañana. Lea la información que le entregamos en las distintas etapas."
+                            vbCrLf & vbCrLf & "Recomendamos no dar clic en 'Siguiente >' como si no hubiese un mañana. Lea la información que le entregamos en las distintas etapas."
                     Else
                         StepA.lblBody.Text = "Select the installation method: Online for an updated installation or Offline for an installation depending on the installation package contained in the StepD." &
                             vbCrLf & vbCrLf & "We recommend not clicking 'Next>' as if there were no tomorrow. Read the information that we give you in the different stages."

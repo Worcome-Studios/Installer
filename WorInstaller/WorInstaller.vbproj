@@ -105,6 +105,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Idioma.vb" />
+    <Compile Include="InstallerCommand.Designer.vb">
+      <DependentUpon>InstallerCommand.vb</DependentUpon>
+    </Compile>
+    <Compile Include="InstallerCommand.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="StepE.designer.vb">
       <DependentUpon>StepE.vb</DependentUpon>
     </Compile>
@@ -162,6 +168,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Asistente.resx">
       <DependentUpon>Asistente.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InstallerCommand.resx">
+      <DependentUpon>InstallerCommand.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StepE.resx">
       <DependentUpon>StepE.vb</DependentUpon>

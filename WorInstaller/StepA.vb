@@ -13,16 +13,17 @@
         Idioma.Forms.Main.OnLoad.AfterLoad()
         Me.BringToFront()
         If isSilenced Then
-            Me.Hide()
-            Threading.Thread.Sleep(150)
-            Continuar()
+            UserClose = True
+            Me.Close()
         End If
     End Sub
     Private Sub StepA_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
-        If UserClose Then
-            UserClose = False
-            AbortInstallProcess(Me, "El usuario cerro la ventana de Introduccion.")
-            'End 'END_PROGRAM
+        If Not isSilenced Then
+            If UserClose Then
+                UserClose = False
+                AbortInstallProcess(Me, "El usuario cerro la ventana de Introduccion.")
+                'SecureCloseAll()
+            End If
         End If
     End Sub
 

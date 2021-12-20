@@ -82,7 +82,7 @@ Partial Class StepE
         '
         Me.lblBody.Location = New System.Drawing.Point(127, 111)
         Me.lblBody.Name = "lblBody"
-        Me.lblBody.Size = New System.Drawing.Size(500, 300)
+        Me.lblBody.Size = New System.Drawing.Size(500, 268)
         Me.lblBody.TabIndex = 4
         Me.lblBody.Text = "Finalizado" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "La instalacion finalizo correctamente" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "o" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "La instalacion fue interr" &
     "umpida"
@@ -122,9 +122,9 @@ Partial Class StepE
         Me.cbSeeInformation.Checked = True
         Me.cbSeeInformation.CheckState = System.Windows.Forms.CheckState.Checked
         Me.cbSeeInformation.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.cbSeeInformation.Location = New System.Drawing.Point(392, 44)
+        Me.cbSeeInformation.Location = New System.Drawing.Point(359, 44)
         Me.cbSeeInformation.Name = "cbSeeInformation"
-        Me.cbSeeInformation.Size = New System.Drawing.Size(122, 30)
+        Me.cbSeeInformation.Size = New System.Drawing.Size(155, 30)
         Me.cbSeeInformation.TabIndex = 6
         Me.cbSeeInformation.Text = "Ver Informacion"
         Me.cbSeeInformation.TextAlign = System.Drawing.ContentAlignment.TopLeft
@@ -139,7 +139,7 @@ Partial Class StepE
         Me.cbSeeWhatsNew.Cursor = System.Windows.Forms.Cursors.Hand
         Me.cbSeeWhatsNew.Location = New System.Drawing.Point(3, 44)
         Me.cbSeeWhatsNew.Name = "cbSeeWhatsNew"
-        Me.cbSeeWhatsNew.Size = New System.Drawing.Size(125, 30)
+        Me.cbSeeWhatsNew.Size = New System.Drawing.Size(158, 30)
         Me.cbSeeWhatsNew.TabIndex = 4
         Me.cbSeeWhatsNew.Text = "Ver el historial de cambios"
         Me.cbSeeWhatsNew.TextAlign = System.Drawing.ContentAlignment.TopLeft
@@ -169,7 +169,7 @@ Partial Class StepE
         Me.cbCreateLNK.Cursor = System.Windows.Forms.Cursors.Hand
         Me.cbCreateLNK.Location = New System.Drawing.Point(3, 8)
         Me.cbCreateLNK.Name = "cbCreateLNK"
-        Me.cbCreateLNK.Size = New System.Drawing.Size(125, 30)
+        Me.cbCreateLNK.Size = New System.Drawing.Size(158, 30)
         Me.cbCreateLNK.TabIndex = 1
         Me.cbCreateLNK.Text = "Crear acceso directo"
         Me.cbCreateLNK.TextAlign = System.Drawing.ContentAlignment.TopLeft
@@ -180,9 +180,9 @@ Partial Class StepE
         '
         Me.cbStartAssembly.CheckAlign = System.Drawing.ContentAlignment.TopLeft
         Me.cbStartAssembly.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.cbStartAssembly.Location = New System.Drawing.Point(392, 8)
+        Me.cbStartAssembly.Location = New System.Drawing.Point(359, 8)
         Me.cbStartAssembly.Name = "cbStartAssembly"
-        Me.cbStartAssembly.Size = New System.Drawing.Size(125, 30)
+        Me.cbStartAssembly.Size = New System.Drawing.Size(158, 30)
         Me.cbStartAssembly.TabIndex = 3
         Me.cbStartAssembly.Text = "Iniciar <AppName>"
         Me.cbStartAssembly.TextAlign = System.Drawing.ContentAlignment.TopLeft

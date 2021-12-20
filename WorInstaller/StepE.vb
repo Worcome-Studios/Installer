@@ -15,41 +15,50 @@
         If isSilenced Then
             Me.Hide()
             Finalizing()
+            EndingProccess()
         End If
     End Sub
     Private Sub StepE_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
-        CreateTelemetry()
         If UserClose Then
-            End 'END_PROGRAM
+            SecureCloseAll()
         End If
     End Sub
 
     Private Sub btnEnd_Click(sender As Object, e As EventArgs) Handles btnEnd.Click
         Finalizing()
-        If ReinstallMode = False Then
-            If UpdateMode = False Then
-                If Installer_NeedRestart Then
-                    AddToInstallerLog("StepE", "El equipo necesita un reinicio para completar la instalacion.", False)
-                    If isForced = False Then
-                        If MessageBox.Show("El programa requiere un reinicio del equipo." & vbCrLf & "¿Quiere reiniciar ahora?", "Reinicio pendiente", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
-                            Process.Start("shutdown.exe", "/r")
-                        End If
-                    Else
-                        Process.Start("shutdown.exe", "/r /t 120")
-                        MsgBox("Se necesita reiniciar el equipo. El equipo se reiniciará en 2 minutos." & vbCrLf & "Para cancelar el reinicio, WINDOWS + R y escriba: shutdown.exe /a", MsgBoxStyle.Information)
-                    End If
-                End If
-                End 'END_PROGRAM
-            Else
-                End 'END_PROGRAM
-            End If
-        Else
-            End 'END_PROGRAM
-        End If
+        EndingProccess()
     End Sub
 
     Private Sub btnExit_Click(sender As Object, e As EventArgs) Handles btnExit.Click
-        End 'END_PROGRAM
+        Me.Close()
+    End Sub
+
+    Sub EndingProccess()
+        Try
+            If ReinstallMode = False Then
+                If UpdateMode = False Then
+                    If Installer_NeedRestart Then
+                        AddToInstallerLog("StepE", "El equipo necesita un reinicio para completar la instalacion.", False)
+                        If isForced = False Then
+                            If MessageBox.Show("El programa requiere un reinicio del equipo." & vbCrLf & "¿Quiere reiniciar ahora?", "Reinicio pendiente", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                                Process.Start("shutdown.exe", "/r")
+                            End If
+                        Else
+                            Process.Start("shutdown.exe", "/r /t 120")
+                            MsgBox("Se necesita reiniciar el equipo. El equipo se reiniciará en 2 minutos." & vbCrLf & "Para cancelar el reinicio, WINDOWS + R y escriba: shutdown.exe /a", MsgBoxStyle.Information)
+                        End If
+                    End If
+                    Me.Close()
+                Else
+                    Me.Close()
+                End If
+            Else
+                Me.Close()
+            End If
+            Me.Close()
+        Catch ex As Exception
+            AddToInstallerLog("EndingProccess@StepE", "Error: " & ex.Message, False)
+        End Try
     End Sub
 
     Sub Finalizing()
@@ -61,19 +70,19 @@
                     End If
                     'CREACION DEL ACCESO DIRECTO PARA DESKTOP
                     Dim WSHShell As Object = CreateObject("WScript.Shell")
-                        Dim Shortcut As Object
-                        Shortcut = WSHShell.CreateShortcut(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) & "\" & AssemblyPackageName & ".lnk")
-                        Shortcut.IconLocation = InstallFolder & "\" & AssemblyName & ".exe" & ",0"
-                        Shortcut.TargetPath = InstallFolder & "\" & AssemblyName & ".exe"
-                        Shortcut.WindowStyle = 1
-                        If AppLanguage = 1 Then
-                            Shortcut.Description = "Iniciar " & AssemblyPackageName
-                        Else
-                            Shortcut.Description = "Start " & AssemblyPackageName
-                        End If
-                        Shortcut.Save()
+                    Dim Shortcut As Object
+                    Shortcut = WSHShell.CreateShortcut(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) & "\" & AssemblyPackageName & ".lnk")
+                    Shortcut.IconLocation = InstallFolder & "\" & AssemblyName & ".exe" & ",0"
+                    Shortcut.TargetPath = InstallFolder & "\" & AssemblyName & ".exe"
+                    Shortcut.WindowStyle = 1
+                    If AppLanguage = 1 Then
+                        Shortcut.Description = "Iniciar " & AssemblyPackageName
+                    Else
+                        Shortcut.Description = "Start " & AssemblyPackageName
                     End If
+                    Shortcut.Save()
                 End If
+            End If
             If Not isSilenced Then
                 If cbSeeWhatsNew.Visible = True Then
                     If cbSeeWhatsNew.Checked = True Then
@@ -136,6 +145,7 @@
         btnExit.Enabled = False
     End Sub
     Sub isSucceedStatus()
+        CorrectProcess = True
         cbCreateLNK.Visible = True
         cbSeeInformation.Visible = True
         cbSeeUseGuide.Visible = True

@@ -1,25 +1,25 @@
 ﻿<html>
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>Wor Installer Carousel</title>
-<script type="text/javascript">
-var imgNumber = 0;
-var imgCount = 4;
-var viewTime = 12500;
-var divs = document.getElementsByTagName("div");
-function ChangeImages()
-{
-	divs[imgNumber].style.display = 'none';
-	imgNumber++;
-	if(imgNumber == imgCount+1)
-	imgNumber = 0;
-	divs[imgNumber].style.display = 'block';
-}
-function SlideShow()
-{
-start = setInterval("ChangeImages()", viewTime);
-}
-</script>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Wor Installer Carousel</title>
+    <script type="text/javascript">
+        var imgNumber = 0;
+        var imgCount = 4;
+        var viewTime = 10000;
+        var divs = document.getElementsByTagName("div");
+        function ChangeImages()
+        {
+	        divs[imgNumber].style.display = 'none';
+	        imgNumber++;
+	        if(imgNumber == imgCount+1)
+	        imgNumber = 0;
+	        divs[imgNumber].style.display = 'block';
+        }
+        function SlideShow()
+        {
+        start = setInterval("ChangeImages()", viewTime);
+        }
+    </script>
 </head>
 <body onload="setTimeout('SlideShow()');">
     <style type="text/css">
@@ -53,12 +53,12 @@ start = setInterval("ChangeImages()", viewTime);
                     <tr>
                         <td align="left">
                             <div id="msgs0" style="display:block; width: 435px;">
-                                <img src="http://WorcomeStudios.comule.com/images/FreeResources/Logo_WorcomeSimply.png" width="70" hspace="15" vspace="5" align="left">
+                                <img src="http://WorcomeStudios.comule.com/images/FreeResources/WorInstaller.png" width="70" hspace="15" vspace="5" align="left">
                                 <h1>Wor Installer:<br />Always helping to install and update</h1>
                                 Install and update programs easily, quickly and securely from our servers, or locally!
                             </div>
 							<div id="msgs1" style="display:none; width: 435px;">
-                                <img src="http://WorcomeStudios.comule.com/images/FreeResources/Logo_WorcomeSimply.png" width="100" hspace="15" vspace="15" align="right">
+                                <img src="http://WorcomeStudios.comule.com/images/FreeResources/WorcomeProAppLogo.png" width="100" hspace="15" vspace="15" align="right">
                                 <h1>Visit us!<br />Worcome Studios website</h1>
                                 Much to see and also very up to date, we recommend you take a walk through our beautiful <a href="http://worcomestudios.comule.com/" title="WorcomeStudios.comule.com" target="_blank">website</a>.
                                 <ul>
@@ -68,7 +68,7 @@ start = setInterval("ChangeImages()", viewTime);
                                 </ul>
                             </div>
 							<div id="msgs2" style="display:none; width: 435px;">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/4/4c/YouTube_icon.png" width="75" hspace="15" vspace="5" align="left">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/7/72/YouTube_social_white_square_%282017%29.svg" width="75" hspace="15" vspace="5" align="left">
                                 <h1>The Worcome Studios YouTube Channel</h1>
                                 Watch our videos about reviews, help, dev on and much more!
                                 <br />

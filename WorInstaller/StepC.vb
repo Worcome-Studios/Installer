@@ -13,17 +13,12 @@
             PIC_IMG_Icon.ImageLocation = AppImageLocation
         End If
         LoadData()
-        If isSilenced Then
-            Me.Hide()
-            Threading.Thread.Sleep(150)
-            Continuar()
-        End If
     End Sub
     Private Sub StepC_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         If UserClose Then
             UserClose = False
             AbortInstallProcess(Me, "El usuario cerro la ventana de Informacion de Ensamblado")
-            'End 'END_PROGRAM
+            'SecureCloseAll()
         End If
     End Sub
 
@@ -51,7 +46,11 @@
 
     Sub LoadData()
         Try
-            lblAssemblyInfo.Text = "La version a instalar es la " & AppStatus.Assembly_Version & " encontrada en el servidor."
+            If AppLanguage = 1 Then
+                lblAssemblyInfo.Text = "La version a instalar es la " & AppStatus.Assembly_Version & " encontrada en el servidor."
+            Else
+                lblAssemblyInfo.Text = "The version to install is " & AppStatus.Assembly_Version & " found in the server."
+            End If
             AddToInstallerLog("StepC", "Se cargo la informacion del ensamblado desde: " & ServerSwitch.DIR_AppHelper & "/AboutApps/" & AssemblyName & ".html", False)
             WebBrowser1.Navigate(ServerSwitch.DIR_AppHelper & "/AboutApps/" & AssemblyName & ".html")
             cbAllUserCanUse.Checked = AllUsersInstall

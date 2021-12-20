@@ -21,6 +21,9 @@ Public Class Asistente
             Idioma.Forms.Assistant.OnLoad.ENG()
         End If
         Idioma.Forms.Assistant.OnLoad.AfterLoad()
+        If isSilenced Then
+            Me.Hide()
+        End If
         If AppLanguage = 1 Then
             Me.Text = AssemblyName & " - Asistente"
         Else
@@ -51,16 +54,30 @@ Public Class Asistente
             Me.Refresh()
         Next
         If UserClose Then
-            End 'END_PROGRAM
+            SecureCloseAll()
         End If
     End Sub
     Private Sub Asistente_HelpRequested(sender As Object, hlpevent As HelpEventArgs) Handles Me.HelpRequested
-        MsgBox("WorInstaller " & My.Application.Info.Version.ToString & " (" & Application.ProductVersion & ")" & " developed by Worcome Studios.", MsgBoxStyle.Information, "Worcome Security")
+        MsgBox("WorInstaller " & My.Application.Info.Version.ToString & " (" & Application.ProductVersion & ")", MsgBoxStyle.Information, "Worcome Security")
     End Sub
     Private Sub btnExit_Click(sender As Object, e As EventArgs) Handles btnExit.Click
         If UserClose Then
-            End 'END_PROGRAM
+            SecureCloseAll()
         End If
+    End Sub
+
+    Sub AddToAssistantLog(ByVal message As String, Optional ByVal flag As Boolean = False)
+        Try
+            AddToInstallerLog("Asistente", message, flag)
+            If flag Then
+                rtbLog.SelectionColor = Color.Red
+            End If
+            rtbLog.AppendText(vbCrLf & message)
+            rtbLog.SelectionColor = DefaultForeColor
+            rtbLog.ScrollToCaret()
+        Catch ex As Exception
+            AddToInstallerLog("AddToAssistantLog@Asistente", "Error: " & ex.Message, True)
+        End Try
     End Sub
 
     Sub GetRegistry()
@@ -99,17 +116,21 @@ Public Class Asistente
 
     Sub Reinstall()
         Try
-            If MessageBox.Show("¿Want to reinstall '" & AssemblyRegistry.GetValue("Assembly") & "'?", "Worcome Security", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
-                rtbLog.AppendText(vbCrLf & "Starting reinstall process...")
-                rtbLog.ScrollToCaret()
-                UserClose = False
-                ReinstallMode = True
-                InstallMode = False
-                UpdateMode = False
-                UninstallMode = False
-                AddToInstallerLog("Asistente", "Iniciando AppService...", False)
-                AppService.StartAppService(False, False, False, True, AssemblyName, AssemblyRegistry.GetValue("Version"))
-                SecureFormClose(StepB, Me)
+            'Verificar que el software no se este ejecutando
+            If IsProccessRunning(IO.Path.GetFileNameWithoutExtension(ExecutableFile)) Then
+                AbortInstallProcess(Me, "No se puede realizar la reinstalacion con el programa ejecutandose.")
+            Else
+                If MessageBox.Show("¿Want to reinstall '" & AssemblyRegistry.GetValue("Assembly") & "'?", "Worcome Security", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                    AddToAssistantLog("Starting reinstall process...")
+                    UserClose = False
+                    ReinstallMode = True
+                    InstallMode = False
+                    UpdateMode = False
+                    UninstallMode = False
+                    AddToInstallerLog("Asistente", "Iniciando AppService...", False)
+                    AppService.StartAppService(False, False, False, True, AssemblyName, AssemblyRegistry.GetValue("Version"))
+                    SecureFormClose(StepB, Me)
+                End If
             End If
         Catch ex As Exception
             AddToInstallerLog("Reinstall@Asistente", "Error: " & ex.Message, True)
@@ -117,12 +138,24 @@ Public Class Asistente
     End Sub
     Sub Uninstall()
         Try
-            If MessageBox.Show("¿Want to uninstall '" & AssemblyRegistry.GetValue("Assembly") & "' de su equipo?", "Worcome Security", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
-                rtbLog.AppendText(vbCrLf & "Starting uninstall process...")
-                rtbLog.ScrollToCaret()
+            'Verificar que el software no se este ejecutando
+            If IsProccessRunning(IO.Path.GetFileNameWithoutExtension(ExecutableFile)) Then
+                AbortInstallProcess(Me, "No se puede realizar la desinstalacion con el programa ejecutandose.")
+            Else
+                If isSilenced Then
+                    GoTo uninstallthething
+                Else
+                    If MessageBox.Show("¿Want to uninstall '" & AssemblyRegistry.GetValue("Assembly") & "' de su equipo?", "Worcome Security", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                        GoTo uninstallthething
+                    Else
+                        Exit Sub
+                    End If
+                End If
+uninstallthething:
+                AddToAssistantLog("Starting uninstall process...")
                 Try
                     'ELIMINAR CARPETA DE INSTALACION Y DIRCommons
-                    rtbLog.AppendText(vbCrLf & "Deleting installation folder...")
+                    AddToAssistantLog("Deleting installation folder...")
                     If My.Computer.FileSystem.DirectoryExists(AssemblyRegistry.GetValue("Directory")) = True Then
                         My.Computer.FileSystem.DeleteDirectory(AssemblyRegistry.GetValue("Directory"), FileIO.DeleteDirectoryOption.DeleteAllContents)
                     End If
@@ -134,8 +167,7 @@ Public Class Asistente
                 End Try
                 Try
                     'ELIMINA LOS ARCHIVOS DEL PROGRAMA
-                    rtbLog.AppendText(vbCrLf & "Deleting programa configuration directory...")
-                    rtbLog.ScrollToCaret()
+                    AddToAssistantLog("Deleting programa configuration directory...")
                     If My.Computer.FileSystem.DirectoryExists("C:\Users\" & Environment.UserName & "\AppData\Local\Worcome_Studios\Commons\Apps\" & AssemblyName) = True Then
                         My.Computer.FileSystem.DeleteDirectory("C:\Users\" & Environment.UserName & "\AppData\Local\Worcome_Studios\Commons\Apps\" & AssemblyName, FileIO.DeleteDirectoryOption.DeleteAllContents)
                     End If
@@ -183,8 +215,7 @@ Public Class Asistente
                 End Try
                 Try
                     'ELIMINA EL REGISTRO DE INSTALACION
-                    rtbLog.AppendText(vbCrLf & "Deleting installation registry...")
-                    rtbLog.ScrollToCaret()
+                    AddToAssistantLog("Deleting installation registry...")
                     Dim RegistryRemover As RegistryKey = Registry.LocalMachine.OpenSubKey(AssemblyRegistry.GetValue("Install Registry"), True)
                     If RegistryRemover IsNot Nothing Then
                         Registry.LocalMachine.DeleteSubKeyTree(AssemblyRegistry.GetValue("Install Registry"))
@@ -194,8 +225,7 @@ Public Class Asistente
                 End Try
                 Try
                     'ELIMINAR ACCESO DIRECTO DE Program
-                    rtbLog.AppendText(vbCrLf & "Deleting direct access files...")
-                    rtbLog.ScrollToCaret()
+                    AddToAssistantLog("Deleting direct access files...")
                     Dim AppFolder_Inicio As String
                     AppFolder_Inicio = Environment.GetFolderPath(Environment.SpecialFolder.Programs) & "\Worcome Studios\Worcome Apps\" & AssemblyPackageName
                     My.Computer.FileSystem.DeleteDirectory(AppFolder_Inicio, FileIO.DeleteDirectoryOption.DeleteAllContents)
@@ -209,8 +239,7 @@ Public Class Asistente
                 End Try
                 Try
                     'ELIMINAR REGISTRO CurrentUser de SignRegistry
-                    rtbLog.AppendText(vbCrLf & "Deleting SignRegistry (CurrentUser)...")
-                    rtbLog.ScrollToCaret()
+                    AddToAssistantLog("Deleting SignRegistry (CurrentUser)...")
                     Dim RegistryRemover As RegistryKey
                     RegistryRemover = Registry.CurrentUser.OpenSubKey("Software\\Worcome_Studios\\" & AssemblyName, True)
                     If RegistryRemover IsNot Nothing Then
@@ -231,8 +260,7 @@ Public Class Asistente
                 End Try
                 Try
                     'ELIMINAR REGISTRO LocalMachine de SignRegistry
-                    rtbLog.AppendText(vbCrLf & "Deleting SignRegistry (LocalMachine)...")
-                    rtbLog.ScrollToCaret()
+                    AddToAssistantLog("Deleting SignRegistry (LocalMachine)...")
                     Dim RegistryRemover As RegistryKey
                     RegistryRemover = Registry.LocalMachine.OpenSubKey("Software\\Worcome_Studios\\" & AssemblyName, True)
                     If RegistryRemover IsNot Nothing Then
@@ -248,23 +276,22 @@ Public Class Asistente
                 Catch ex As Exception
                     AddToInstallerLog("Uninstall(9)@Asistente", "Error: " & ex.Message, True)
                 End Try
-                rtbLog.AppendText(vbCrLf & "Uninstall complete...")
-                rtbLog.ScrollToCaret()
-                If AppLanguage = 1 Then
-                    MsgBox("Desinstalación completa", MsgBoxStyle.Information, "Worcome Security")
-                    If MessageBox.Show("¿Quiere completar una pequeña encuesta?" & vbCrLf & "Nos ayudaría mucho saber su opinión", "Worcome Community", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
-                        Process.Start("https://docs.google.com/forms/d/e/1FAIpQLSevAg6CpdzgHV1cK1QvNp41DzXb-Rf379vn9znIOFp1FO-cug/viewform?usp=pp_url&entry.2061732064=" & AssemblyPackageName)
-                    End If
-                Else
-                    MsgBox("Uninstall Completed", MsgBoxStyle.Information, "Worcome Security")
-                    If MessageBox.Show("Do you want to complete a short survey?" & vbCrLf & "It would help us a lot to know your opinion!", "Worcome Community", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
-                        Process.Start("https://docs.google.com/forms/d/e/1FAIpQLSevAg6CpdzgHV1cK1QvNp41DzXb-Rf379vn9znIOFp1FO-cug/viewform?usp=pp_url&entry.2061732064=" & AssemblyPackageName)
+                AddToAssistantLog("Uninstall complete...")
+                If Not isSilenced Then
+                    If AppLanguage = 1 Then
+                        MsgBox("Desinstalación completa", MsgBoxStyle.Information, "Worcome Security")
+                        If MessageBox.Show("¿Quiere completar una pequeña encuesta?" & vbCrLf & "Nos ayudaría mucho saber su opinión", "Worcome Community", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                            Process.Start("https://docs.google.com/forms/d/e/1FAIpQLSevAg6CpdzgHV1cK1QvNp41DzXb-Rf379vn9znIOFp1FO-cug/viewform?usp=pp_url&entry.2061732064=" & AssemblyPackageName)
+                        End If
+                    Else
+                        MsgBox("Uninstall Completed", MsgBoxStyle.Information, "Worcome Security")
+                        If MessageBox.Show("Do you want to complete a short survey?" & vbCrLf & "It would help us a lot to know your opinion!", "Worcome Community", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                            Process.Start("https://docs.google.com/forms/d/e/1FAIpQLSevAg6CpdzgHV1cK1QvNp41DzXb-Rf379vn9znIOFp1FO-cug/viewform?usp=pp_url&entry.2061732064=" & AssemblyPackageName)
+                        End If
                     End If
                 End If
-                'CreateTelemetry()
-                rtbLog.AppendText(vbCrLf & "Closing...")
-                rtbLog.ScrollToCaret()
-                End 'END_PROGRAM
+                AddToAssistantLog("Closing...")
+                SecureCloseAll()
             End If
         Catch ex As Exception
             AddToInstallerLog("Uninstall(10)@Asistente", "Error: " & ex.Message, True)
@@ -272,8 +299,7 @@ Public Class Asistente
     End Sub
     Sub Reset()
         Try
-            rtbLog.AppendText(vbCrLf & "Starting reset process...")
-            rtbLog.ScrollToCaret()
+            AddToAssistantLog("Starting reset process...")
             Process.Start(AssemblyRegistry.GetValue("Assembly Path"), "/FactoryReset")
         Catch ex As Exception
             AddToInstallerLog("Reset@Asistente", "Error: " & ex.Message, True)
@@ -284,8 +310,7 @@ Public Class Asistente
             AddToInstallerLog("Asistente", "Iniciando AppService...", False)
             UpdateMode = True
             AppService.StartAppService(False, False, False, True, AssemblyName, AssemblyRegistry.GetValue("Version"))
-            rtbLog.AppendText(vbCrLf & "Searching for updates...")
-            rtbLog.ScrollToCaret()
+            AddToAssistantLog("Searching for updates...")
         Catch ex As Exception
             AddToInstallerLog("SearchUpdates@Asistente", "Error: " & ex.Message, True)
         End Try
@@ -296,8 +321,7 @@ Public Class Asistente
         Dim versionLocal = New Version(AssemblyRegistry.GetValue("Version"))
         Dim versionServidor = New Version(Assembly_Version)
         Dim result = versionLocal.CompareTo(versionServidor)
-        rtbLog.AppendText(vbCrLf & "Server: " & Assembly_Version & "    Local: " & versionLocal.ToString)
-        rtbLog.ScrollToCaret()
+        AddToAssistantLog("Server: " & Assembly_Version & "    Local: " & versionLocal.ToString)
         If (result < 0) Then
             If AppLanguage = 1 Then
                 If MessageBox.Show("Hay una actualización disponible." & vbCrLf & "La descarga será desde el servidor." & vbCrLf & "¿Quiere actualizar?", "Worcome Security", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = System.Windows.Forms.DialogResult.Yes Then
@@ -320,8 +344,7 @@ Public Class Asistente
     End Sub
     Sub UpdateIt()
         Try
-            rtbLog.AppendText(vbCrLf & "Starting update process...")
-            rtbLog.ScrollToCaret()
+            AddToAssistantLog("Starting update process...")
             UserClose = False
             ReinstallMode = False
             InstallMode = False

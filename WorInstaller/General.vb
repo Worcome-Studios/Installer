@@ -12,6 +12,7 @@ Module Telemetry
             TelemetryID = CreateIdentification("Identification")
             Dim MotherboardSerial As String = GetMotherBoardID()
             Dim CPUSerial As String = GetCpuID()
+            Dim IPAddr As String = GetIPAddress()
             If My.Computer.FileSystem.FileExists(DIRCommons & "\[" & TelemetryID & "]TLM_Installer" & AssemblyName & ".tlm") Then
                 My.Computer.FileSystem.DeleteFile(DIRCommons & "\[" & TelemetryID & "]TLM_Installer" & AssemblyName & ".tlm")
             End If
@@ -38,6 +39,8 @@ Module Telemetry
                                                 vbCrLf & "ReinstallMode=" & ReinstallMode &
                                                 vbCrLf & "AssistantMode=" & AssistantMode &
                                                 vbCrLf & "DowngradeForce=" & AppStatus.Installer_CanDowngrade &
+                                                vbCrLf & "isCMD=" & isCMD &
+                                                vbCrLf & "isCMDAllowed=" & isCMDAllowed &
                                                 vbCrLf & "AllUsersInstall=" & AllUsersInstall &
                                                 vbCrLf & "DownloadPackageFile=" & AppStatus.Installer_BinDownload &
                                                 vbCrLf & "[Online]" &
@@ -53,16 +56,18 @@ Module Telemetry
                                                 vbCrLf & "StartupPath=" & Application.ExecutablePath & vbCrLf &
                                                 vbCrLf & "[Computer]" &
                                                 vbCrLf & "Name=" & Environment.UserDomainName & " or " & Environment.MachineName &
-                                                vbCrLf & "SO=" & My.Computer.Info.OSFullName & My.Computer.Info.OSVersion &
+                                                vbCrLf & "SO=" & My.Computer.Info.OSFullName & " " & My.Computer.Info.OSVersion &
                                                 vbCrLf & "RAM=" & My.Computer.Info.TotalPhysicalMemory &
                                                 vbCrLf & "BitsArch=" & ProcessorArch & " (" & Installer_BitArch & ")" &
                                                 vbCrLf & "Screen=" & My.Computer.Screen.Bounds.ToString & " (Area en Uso: " & My.Computer.Screen.WorkingArea.ToString & ")" &
                                                 vbCrLf & "Languaje=" & My.Computer.Info.InstalledUICulture.NativeName &
                                                 vbCrLf & "TimeAndDate=" & Format(DateAndTime.TimeOfDay, "hh") & ":" & Format(DateAndTime.TimeOfDay, "mm") & ":" & Format(DateAndTime.TimeOfDay, "ss") & Format(DateAndTime.TimeOfDay, "tt") & "@" & (DateAndTime.Today) &
                                                 vbCrLf & "MotherboardSerial=" & MotherboardSerial &
-                                                vbCrLf & "CPUSerial=" & CPUSerial & vbCrLf &
+                                                vbCrLf & "CPUSerial=" & CPUSerial &
+                                                vbCrLf & "IPAddr=" & IPAddr & vbCrLf &
                                                 vbCrLf & "[Log]" &
                                                 vbCrLf & "#Installer Log" & vbCrLf & InstallerLogContent
+            AddToInstallerLog("TELEMETRY", TLM_Content, True, 3)
             SendTelemetry(TLM_Content, False)
         Catch ex As Exception
         End Try
@@ -89,6 +94,10 @@ Module Telemetry
         Next
         Return cpuInfo
     End Function
+    Function GetIPAddress() As String
+        Dim ip As New WebClient
+        Return ip.DownloadString(SW_UsingServer & "/getIP.php")
+    End Function
     Sub SendTelemetry(ByVal content As String, ByVal localCopy As Boolean)
         Try
             Dim request As WebRequest = WebRequest.Create(ServerSwitch.DIR_Telemetry & "/postTelemetry.php")
@@ -106,6 +115,7 @@ Module Telemetry
             Else
             End If
             response.Close()
+            InstallerLogContent = Nothing
         Catch
         End Try
         Try
@@ -126,7 +136,12 @@ Module Telemetry
         Catch
         End Try
     End Sub
-    Sub AddToInstallerLog(ByVal from As String, ByVal content As String, Optional ByVal flag As Boolean = False)
+    Sub AddToInstallerLog(ByVal from As String, ByVal content As String, Optional ByVal flag As Boolean = False, Optional ByVal flagType As SByte = 0)
+        Dim finalContent As String = Nothing
+        If flag Then
+            finalContent = " [!!!]"
+        End If
+        InstallerCommand.AddToCommandLog(from, content, flagType)
         If content.Contains("&") Then
             content = content.Replace("&", "(ampersandSymb)")
         ElseIf content.Contains("+") Then
@@ -139,17 +154,19 @@ Module Telemetry
             content = content.Replace("#", "(hashtagSymb)")
         End If
         Try
-            Dim finalContent As String = Nothing
-            If flag = True Then
-                finalContent = " [!!!]"
-            End If
             Dim Message As String = DateTime.Now.ToString("hh:mm:ss tt dd/MM/yyyy") & finalContent & " [" & from & "] " & content
             InstallerLogContent &= vbCrLf & Message
             Console.WriteLine("[" & from & "]" & finalContent & " " & content)
-            'Try
-            '    My.Computer.FileSystem.WriteAllText(DIRCommons & "\Activity.log", vbCrLf & Message, True)
-            'Catch
-            'End Try
+            Try
+                If SaveLocalLog Then
+                    If My.Computer.FileSystem.FileExists(DIRCommons & "\Activity.log") Then
+                        My.Computer.FileSystem.WriteAllText(DIRCommons & "\Activity.log", vbCrLf & Message, True)
+                    Else
+                        My.Computer.FileSystem.WriteAllText(DIRCommons & "\Activity.log", vbCrLf & vbCrLf & Message, False)
+                    End If
+                End If
+            Catch
+            End Try
         Catch ex As Exception
             Console.WriteLine("[AddToInstallerLog@Telemetry]Error: " & ex.Message)
         End Try
@@ -172,8 +189,8 @@ Module PublicInformation
     Public ReadOnly DIRCommons As String = "C:\Users\" & Environment.UserName & "\AppData\Local\Temp\" & My.Application.Info.AssemblyName
 
     'Ensamblado
-    Public AssemblyName As String = "*" 'Nombre del ensamblado a Instalar (AutoRellenado)
-    Public AssemblyVersion As String = "*.*.*.*"  'Version del ensamblado a Instalar (AutoRellenado)
+    Public AssemblyName As String = Nothing 'Nombre del ensamblado a Instalar (AutoRellenado)
+    Public AssemblyVersion As String = Nothing 'Version del ensamblado a Instalar (AutoRellenado)
     Public AssemblyPackageName As String = Nothing 'Nombre del producto (AutoRellenado)
     Public AssemblyRegistry As RegistryKey = Nothing
     Public AppImageLocation As String = Nothing 'ICONO DEL ENSAMBLADO (AutoRellenado)
@@ -187,14 +204,18 @@ Module PublicInformation
     Public isSilenced As Boolean
     Public isForced As Boolean
     Public CanDowngrade As Boolean = False
+    Public isCMD As Boolean = False
+    Public Const isCMDAllowed As Boolean = True
     Public zippedFilePath As String 'El paquete de instalacion .ZIP (AutoRellenado)
     Public extractFolderPath As String 'Donde se descomprimira el paquete de instalacion .ZIP (AutoRellenado)
     Public InstallFolder As String 'Donde se instalara el paquete de instalacion (AutoRellenado)
     Public AllUsersInstall As Boolean = True
     Public SoftwareInstalledMode As SByte = 0 'Indica si el programa esta instalado a nivel maquina (0) o solo a nivel usuario (1)
+    Public ExecutableFile As String 'Nombre del ejecutable + su extencion. (AutoRellenado)
     Public PackageSize As ULong
     Public InstallerRegistry As String
-
+    Public SaveLocalLog As Boolean = True 'True: Guarda el LOG del instalador en local. False: No lo guarda en local.
+    Public CorrectProcess As Boolean = False 'True para un proceso correcto. False para alguna incidencia.
     'Local machine
     Public ProcessorArch As SByte
 
@@ -208,18 +229,17 @@ Module StartUp
     Sub Inicializate()
         'LEER PARAMETROS O EL INJECTADO.
         Debugger.ReadParameters()
-        'SET DE VARIABLES PARA SUS USOS POSTERIORES
-        SetSubVariables()
-        'ACCIONES COMUNES
-        CommonActions()
-        'COMENZAMOS EL PROCESO DE INSTALACION
-        StartPreInstallProcess()
+        If Not isCMD Then
+            'COMENZAMOS EL PROCESO DE INSTALACION
+            StartPreInstallProcess()
+        End If
     End Sub
 
     Sub SetSubVariables()
         AddToInstallerLog("StartUp", "Indicando variables", False)
         Try
             AssemblyPackageName = AssemblyName.Replace("Wor", Nothing) 'Indica el nombre del producto a instalar
+            ExecutableFile = AssemblyName & ".exe"
             zippedFilePath = DIRCommons & "\[" & AssemblyName & "]Package.zip"
             extractFolderPath = DIRCommons & "\" & AssemblyName 'Donde se descomprimira
             AssemblyRegistry = Registry.LocalMachine.OpenSubKey("Software\\Worcome_Studios\\" & AssemblyName, True) 'Indica el registro del ensamblado
@@ -254,6 +274,7 @@ Module PreInstall
 
     Sub StartPreInstallProcess()
         'CHECKEAMOS SI EL ENSAMBLADO ESTA O NO INSTALADO
+        AddToInstallerLog("PreInstall", "Iniciando instancia de instalacion...", False)
         CheckForInstalledSoftware()
     End Sub
 
@@ -327,31 +348,91 @@ End Module
 Module GeneralUses
     Public ActualShowForm As Form
 
-    Sub SecureFormClose(ByVal ShowForm As Form, ByVal CloseForm As Form)
+    Sub SecureCloseAll(Optional ByVal reason As String = Nothing)
         Try
-            AddToInstallerLog("SecureFormClose", "El formulario '" & CloseForm.Text & "' llamo a '" & ShowForm.Text & "'", False)
-            LocationX = CloseForm.Location.X
-            LocationY = CloseForm.Location.Y
-            ActualShowForm = ShowForm
-            If isSilenced = False Then
+            If reason <> Nothing Then
+                AddToInstallerLog("SecureCloseAll", "Closing reason: " & reason, True, 1)
+            Else
+                AddToInstallerLog("SecureCloseAll", "Closing...", True, 1)
+            End If
+            If CorrectProcess Then
+                CreateTelemetry()
+            End If
+            If Not isCMD Then
+                End 'END_PROGRAM
+            End If
+        Catch ex As Exception
+            AddToInstallerLog("SecureCloseAll@GeneralUses", "Error: " & ex.Message, True)
+        End Try
+    End Sub
+
+    Dim FirstMessageShowed_CheckIfRunning As Boolean = False
+    Function IsProccessRunning(ByVal pName As String)
+        AddToInstallerLog("IsProccessRunning", "Buscando instancias...", False, 0)
+        For Each clsProcess As Process In Process.GetProcesses()
+            If clsProcess.ProcessName.StartsWith(pName) Then
+                AddToInstallerLog("IsProccessRunning", "Instancia abierta!", True, 1)
+                If Not FirstMessageShowed_CheckIfRunning Then
+                    If MessageBox.Show(pName & " is running. The proccess has been paused." & vbCrLf & "¿Want to close '" & ExecutableFile & "' and continue?", "Worcome Security", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) = DialogResult.Yes Then
+                        FirstMessageShowed_CheckIfRunning = True
+                    Else
+                        Return True
+                    End If
+                End If
+                AddToInstallerLog("IsProccessRunning", "Cerrando instancia...", False, 0)
+                clsProcess.Kill()
+            End If
+        Next
+        Return False
+    End Function
+
+    Sub ControlControls(ByVal status As Boolean)
+        Try
+            StepA.Panel1.Enabled = status
+
+            StepB.Panel1.Enabled = status
+
+            StepC.Panel1.Enabled = status
+
+            StepD.Panel1.Enabled = status
+
+            StepE.Panel1.Enabled = status
+        Catch ex As Exception
+            AddToInstallerLog("ControlControls@GeneralUses", "Error: " & ex.Message, True)
+        End Try
+    End Sub
+
+    Sub SecureFormClose(ByVal ShowForm As Form, Optional ByVal CloseForm As Form = Nothing)
+        Try
+            If CloseForm IsNot Nothing Then
+                AddToInstallerLog("SecureFormClose", "El formulario '" & CloseForm.Text & "' llamo a '" & ShowForm.Text & "'", False)
+                LocationX = CloseForm.Location.X
+                LocationY = CloseForm.Location.Y
+                ActualShowForm = ShowForm
                 ShowForm.Show()
                 ShowForm.Location = New Point(LocationX, LocationY)
                 ShowForm.Focus()
+                CloseForm.Dispose()
+                CloseForm.Close()
             Else
+                AddToInstallerLog("SecureFormClose", "Se llamo al formulario '" & ShowForm.Text & "'", False)
                 ShowForm.WindowState = FormWindowState.Minimized
                 ShowForm.Show()
                 ShowForm.Hide()
             End If
-            CloseForm.Dispose()
-            CloseForm.Close()
         Catch ex As Exception
             AddToInstallerLog("SecureFormClose@GeneralUses", "Error: " & ex.Message, True)
         End Try
     End Sub
-    Sub AbortInstallProcess(ByVal FromForm As Form, ByVal reason As String)
+    Sub AbortInstallProcess(Optional ByVal FromForm As Form = Nothing, Optional ByVal reason As String = Nothing)
         Try
-            AddToInstallerLog("AbortInstallProcess", "Proceso interrumpido. (" & FromForm.Text & ", " & reason & ")", False)
-            SecureFormClose(StepE, FromForm)
+            If FromForm Is Nothing Then
+                AddToInstallerLog("AbortInstallProcess", "Proceso interrumpido. (" & reason & ")", False)
+                SecureFormClose(StepE)
+            Else
+                AddToInstallerLog("AbortInstallProcess", "Proceso interrumpido. (" & FromForm.Text & ", " & reason & ")", False)
+                SecureFormClose(StepE, FromForm)
+            End If
             StepE.SetStatus(reason, 0)
         Catch ex As Exception
             AddToInstallerLog("AbortInstallProcess@GeneralUses", "Error: " & ex.Message, True)
@@ -375,6 +456,11 @@ Module GeneralUses
             AssemblyVersion = AppStatus.Assembly_Version
             AppImageLocation = ServerSwitch.SW_UsingServer & "/images/AppsImage/Icons/" & AssemblyPackageName & ".png"
             StepB.rbAccept.Enabled = True
+            If isSilenced Then
+                If InstallMode Then
+                    SecureFormClose(StepD)
+                End If
+            End If
             If UpdateMode Then
                 Asistente.CheckIfUpdate()
             End If
