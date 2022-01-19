@@ -105,12 +105,14 @@ Partial Class StepC
         Me.cbAllUserCanUse.Checked = True
         Me.cbAllUserCanUse.CheckState = System.Windows.Forms.CheckState.Checked
         Me.cbAllUserCanUse.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.cbAllUserCanUse.Enabled = False
         Me.cbAllUserCanUse.Location = New System.Drawing.Point(114, 53)
         Me.cbAllUserCanUse.Name = "cbAllUserCanUse"
         Me.cbAllUserCanUse.Size = New System.Drawing.Size(226, 17)
         Me.cbAllUserCanUse.TabIndex = 1
         Me.cbAllUserCanUse.Text = "Instalación para todos los usuarios"
         Me.cbAllUserCanUse.UseVisualStyleBackColor = True
+        Me.cbAllUserCanUse.Visible = False
         '
         'btnNext
         '

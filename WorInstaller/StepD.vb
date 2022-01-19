@@ -1,4 +1,5 @@
 ﻿Imports System.ComponentModel
+Imports System.IO
 Imports System.IO.Compression
 Imports System.Net
 Imports Microsoft.Win32
@@ -142,6 +143,10 @@ Public Class StepD 'Instalador / Installer / FOUR
                 btnNext.Text = "Instalando..."
                 'DEFINE DONDE SE INSTALARA
                 WhereDoIInstall()
+                'CREA COPIA DE SEGURIDAD SI YA SE HA INSTALADO
+                If IsSoftwareInstalled Then
+                    InstallBackup(False)
+                End If
                 'EXTRAER LOS DATOS PARA LA INSTALACION
                 UnZipPacket()
                 'COPIAR LO DESCOMPRIMIDO A LA CARPETA DE INSTALACION
@@ -272,33 +277,61 @@ Public Class StepD 'Instalador / Installer / FOUR
     Sub CreatePostInstallFiles()
         AddToInstallerLog("StepD", "Creando archivos Post-Instalacion...", False)
         Try
-            'CREACION DE LA CARPETA Program EN EL MENU DE WINDOWS SI NO EXISTE.
-            If My.Computer.FileSystem.DirectoryExists(Environment.GetFolderPath(Environment.SpecialFolder.Programs) & "\Worcome Studios\Worcome Apps\" & AssemblyPackageName) = False Then
-                My.Computer.FileSystem.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.Programs) & "\Worcome Studios\Worcome Apps\" & AssemblyPackageName)
-                AddToInstallerLog("StepD", "Se ha creado el directorio comun para aplicaciones.", False)
-            End If
-            'ELIMINACION DEL ACCESO DIRECTO DE Program SI EXISTE.
-            If My.Computer.FileSystem.FileExists(Environment.GetFolderPath(Environment.SpecialFolder.Programs) & "\Worcome Studios\Worcome Apps\" & AssemblyPackageName & "\" & AssemblyName & ".lnk") = True Then
-                My.Computer.FileSystem.DeleteFile(Environment.GetFolderPath(Environment.SpecialFolder.Programs) & "\Worcome Studios\Worcome Apps\" & AssemblyPackageName & "\" & AssemblyName & ".lnk")
-                AddToInstallerLog("StepD", "Se ha eliminado el acceso directo del directorio comun para aplicaciones.", False)
-            End If
-            'CREACION DEL ACCESO DIRECTO PARA Program.
-            Dim WSHShell As Object = CreateObject("WScript.Shell")
-            Dim Shortcut As Object
-            Shortcut = WSHShell.CreateShortcut(Environment.GetFolderPath(Environment.SpecialFolder.Programs) & "\Worcome Studios\Worcome Apps\" & AssemblyPackageName & "\" & AssemblyName & ".lnk")
-            Shortcut.IconLocation = InstallFolder & "\" & AssemblyName & ".exe" & ",0"
-            Shortcut.TargetPath = InstallFolder & "\" & AssemblyName & ".exe"
-            Shortcut.WindowStyle = 1
-            Shortcut.Description = "Run " & AssemblyPackageName
-            Shortcut.Save()
-            AddToInstallerLog("StepD", "Se ha creado el acceso directo del directorio comun para aplicaciones.", False)
-            'CREACION DEL ASISTENTE POST-INSTALACION
-            If My.Computer.FileSystem.FileExists(InstallFolder & "\uninstall.exe") = True Then
-                My.Computer.FileSystem.DeleteFile(InstallFolder & "\uninstall.exe")
-                AddToInstallerLog("StepD", "Se ha eliminado el asistente Post-Instalacion.", False)
-            End If
-            My.Computer.FileSystem.CopyFile(Application.ExecutablePath, InstallFolder & "\uninstall.exe")
-            AddToInstallerLog("StepD", "Se ha creado el asistente Post-Instalacion.", False)
+            Try
+                'CREACION DE LA CARPETA Program EN EL MENU DE WINDOWS SI NO EXISTE.
+                If My.Computer.FileSystem.DirectoryExists(Environment.GetFolderPath(Environment.SpecialFolder.Programs) & "\Worcome Studios\Worcome Apps\" & AssemblyPackageName) = False Then
+                    My.Computer.FileSystem.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.Programs) & "\Worcome Studios\Worcome Apps\" & AssemblyPackageName)
+                    AddToInstallerLog("StepD", "Se ha creado el directorio comun para aplicaciones.", False)
+                End If
+            Catch ex As Exception
+                AddToInstallerLog("CreatePresence(0)@StepD", "Error: " & ex.Message, True)
+            End Try
+            Try
+                'ELIMINACION DEL ACCESO DIRECTO DE Program SI EXISTE.
+                If My.Computer.FileSystem.FileExists(Environment.GetFolderPath(Environment.SpecialFolder.Programs) & "\Worcome Studios\Worcome Apps\" & AssemblyPackageName & "\" & AssemblyName & ".lnk") = True Then
+                    My.Computer.FileSystem.DeleteFile(Environment.GetFolderPath(Environment.SpecialFolder.Programs) & "\Worcome Studios\Worcome Apps\" & AssemblyPackageName & "\" & AssemblyName & ".lnk")
+                    AddToInstallerLog("StepD", "Se ha eliminado el acceso directo del directorio comun para aplicaciones.", False)
+                End If
+            Catch ex As Exception
+                AddToInstallerLog("CreatePresence(1)@StepD", "Error: " & ex.Message, True)
+            End Try
+            Try
+                'CREACION DEL ACCESO DIRECTO PARA Program.
+                Dim WSHShell As Object = CreateObject("WScript.Shell")
+                Dim Shortcut As Object
+                Shortcut = WSHShell.CreateShortcut(Environment.GetFolderPath(Environment.SpecialFolder.Programs) & "\Worcome Studios\Worcome Apps\" & AssemblyPackageName & "\" & AssemblyName & ".lnk")
+                Shortcut.IconLocation = InstallFolder & "\" & AssemblyName & ".exe" & ",0"
+                Shortcut.TargetPath = InstallFolder & "\" & AssemblyName & ".exe"
+                Shortcut.WindowStyle = 1
+                Shortcut.Description = "Run " & AssemblyPackageName
+                Shortcut.Save()
+                AddToInstallerLog("StepD", "Se ha creado el acceso directo del directorio comun para aplicaciones.", False)
+            Catch ex As Exception
+                AddToInstallerLog("CreatePresence(2)@StepD", "Error: " & ex.Message, True)
+            End Try
+            Try
+                'CREACION DEL ASISTENTE POST-INSTALACION
+                If My.Computer.FileSystem.FileExists(InstallFolder & "\uninstall.exe") = True Then
+                    My.Computer.FileSystem.DeleteFile(InstallFolder & "\uninstall.exe")
+                    AddToInstallerLog("StepD", "Se ha eliminado el asistente Post-Instalacion.", False)
+                End If
+                'My.Computer.FileSystem.CopyFile(Application.ExecutablePath, InstallFolder & "\uninstall.exe")
+                Dim stub As String
+                Const FS1 As String = "|WOR|"
+                Dim Temp As String = InstallFolder & "\uninstall.exe"
+                Dim bytesEXE As Byte() = System.IO.File.ReadAllBytes(Application.ExecutablePath)
+                File.WriteAllBytes(Temp, bytesEXE)
+                FileOpen(1, Temp, OpenMode.Binary, OpenAccess.Read, OpenShare.Default)
+                stub = Space(LOF(1))
+                FileGet(1, stub)
+                FileClose(1)
+                FileOpen(1, Temp, OpenMode.Binary, OpenAccess.ReadWrite, OpenShare.Default)
+                FilePut(1, stub & FS1 & AssemblyName & FS1 & AssemblyVersion & FS1)
+                FileClose(1)
+                AddToInstallerLog("StepD", "Se ha creado el asistente Post-Instalacion.", False)
+            Catch ex As Exception
+                AddToInstallerLog("CreatePresence(3)@StepD", "Error: " & ex.Message, True)
+            End Try
         Catch ex As Exception
             AddToInstallerLog("CreatePresence@StepD", "Error: " & ex.Message, True)
             CriticalError(Me, ex.Message)

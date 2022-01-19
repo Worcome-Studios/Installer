@@ -10,11 +10,10 @@ Namespace My
     Partial Friend Class MyApplication
         Private Sub MyApplication_NetworkAvailabilityChanged(sender As Object, e As NetworkAvailableEventArgs) Handles Me.NetworkAvailabilityChanged
             If e.IsNetworkAvailable Then
-                ControlControls(e.IsNetworkAvailable)
+                ControlControls(True)
             Else
-                ControlControls(e.IsNetworkAvailable)
+                ControlControls(False)
             End If
-            AddToInstallerLog("ApplicationEvents", "Estado de conexion: " & e.IsNetworkAvailable, True, 1)
         End Sub
 
         Private Sub MyApplication_Shutdown(sender As Object, e As EventArgs) Handles Me.Shutdown

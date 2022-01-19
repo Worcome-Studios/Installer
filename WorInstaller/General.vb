@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.IO.Compression
 Imports System.Management
 Imports System.Net
 Imports System.Text
@@ -157,6 +158,9 @@ Module Telemetry
             Dim Message As String = DateTime.Now.ToString("hh:mm:ss tt dd/MM/yyyy") & finalContent & " [" & from & "] " & content
             InstallerLogContent &= vbCrLf & Message
             Console.WriteLine("[" & from & "]" & finalContent & " " & content)
+            If from = Nothing And content = Nothing Then
+                Message = Nothing
+            End If
             Try
                 If SaveLocalLog Then
                     If My.Computer.FileSystem.FileExists(DIRCommons & "\Activity.log") Then
@@ -201,6 +205,7 @@ Module PublicInformation
     Public UninstallMode As Boolean = False
     Public ReinstallMode As Boolean = False
     Public AssistantMode As Boolean = False
+    Public IsSoftwareInstalled As Boolean = False
     Public isSilenced As Boolean
     Public isForced As Boolean
     Public CanDowngrade As Boolean = False
@@ -286,7 +291,7 @@ Module PreInstall
                     'NO ESTA INSTALADO
                     AddToInstallerLog("PreInstall", "No se encontro un registro de instalacion.", False)
                     'NO INSTALADO, COMPROBADO.
-                    StarInstallProcess()
+                    StartInstallProcess()
                 Else
                     'EXISTE UN REGISTRO, SE DEBE COMPROBAR
                     AddToInstallerLog("PreInstall", "Existe el ensamblado. Comprobando...", False)
@@ -297,8 +302,9 @@ Module PreInstall
                         AssemblyRegistry.GetValue("Directory") = Nothing Then
                         AddToInstallerLog("PreInstall", "El registro del ensamblado no esta correctamente configurando.", False)
                         'NO INSTALADO, COMPROBADO.
-                        StarInstallProcess()
+                        StartInstallProcess()
                     Else
+                        IsSoftwareInstalled = True
                         AddToInstallerLog("PreInstall", "El software esta instalado y registrado.", False)
                         'ASISENTE
                         StartAssistant()
@@ -310,7 +316,7 @@ Module PreInstall
         End Try
     End Sub
 
-    Sub StarInstallProcess()
+    Sub StartInstallProcess()
         'LLAMADA A AppService PARA CARGAR LOS DATOS DEL ENSAMBLADO
         AddToInstallerLog("StartUp", "Iniciando AppService...", False)
         AppService.StartAppService(False, False, False, True, AssemblyName, AssemblyVersion)
@@ -332,6 +338,7 @@ Module PreInstall
         AddToInstallerLog("PreInstall", "Iniciando el asistente...", False)
         Debugger.StartFromAnotherLocation()
         Try
+            IsSoftwareInstalled = True
             AssistantMode = True
             InstallMode = False
             'UninstallMode = False
@@ -341,6 +348,37 @@ Module PreInstall
             Asistente.BringToFront()
         Catch ex As Exception
             AddToInstallerLog("StartAssistant@PreInstall", "Error: " & ex.Message, True)
+        End Try
+    End Sub
+
+    Sub InstallBackup(ByVal Restore As Boolean)
+        Try
+            Dim backupFolder As String = DIRCommons & "\" & AssemblyName & "\BackUp"
+            If Restore Then
+                'RESTAURA LA COPIA
+                If My.Computer.FileSystem.DirectoryExists(backupFolder) Then
+                    AddToInstallerLog("PreInstall", "Aplicando la copia de seguridad...", False)
+                    My.Computer.FileSystem.CopyDirectory(backupFolder, InstallFolder)
+                Else
+                    'INTENTANDO CON EL .ZIP (si existe)
+                    If My.Computer.FileSystem.FileExists(zippedFilePath) Then
+                        AddToInstallerLog("PreInstall", "Aplicando desde paquete de instalación...", False)
+                        ZipFile.ExtractToDirectory(zippedFilePath, InstallFolder)
+                    Else
+                        AddToInstallerLog("PreInstall", "No se encontró una copia de seguridad.", False)
+                    End If
+                End If
+            Else
+                'CREA LA COPIA
+                AddToInstallerLog("PreInstall", "Creando la copia de seguridad...", False)
+                If My.Computer.FileSystem.DirectoryExists(backupFolder) Then
+                    My.Computer.FileSystem.DeleteDirectory(backupFolder, FileIO.DeleteDirectoryOption.DeleteAllContents)
+                End If
+                My.Computer.FileSystem.CreateDirectory(backupFolder)
+                My.Computer.FileSystem.CopyDirectory(InstallFolder, backupFolder)
+            End If
+        Catch ex As Exception
+            AddToInstallerLog("CreateInstallBackup@PreInstall", "Error: " & ex.Message, True)
         End Try
     End Sub
 
@@ -370,7 +408,7 @@ Module GeneralUses
     Function IsProccessRunning(ByVal pName As String)
         AddToInstallerLog("IsProccessRunning", "Buscando instancias...", False, 0)
         For Each clsProcess As Process In Process.GetProcesses()
-            If clsProcess.ProcessName.StartsWith(pName) Then
+            If clsProcess.ProcessName = pName Then
                 AddToInstallerLog("IsProccessRunning", "Instancia abierta!", True, 1)
                 If Not FirstMessageShowed_CheckIfRunning Then
                     If MessageBox.Show(pName & " is running. The proccess has been paused." & vbCrLf & "¿Want to close '" & ExecutableFile & "' and continue?", "Worcome Security", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) = DialogResult.Yes Then
@@ -442,6 +480,30 @@ Module GeneralUses
     Sub CriticalError(ByVal fromForm As Form, ByVal theError As String)
         Try
             AddToInstallerLog("CriticalError", "Error critico. (" & fromForm.Text & ", " & theError & ")", True)
+            Try
+                'SI ESTA INSTALADO, ESTO NO DEBE GATILLAR.
+                If Not IsSoftwareInstalled Then
+                    'ELIMINA TODO
+                    Try
+                        If My.Computer.FileSystem.DirectoryExists(InstallFolder) Then
+                            My.Computer.FileSystem.DeleteDirectory(InstallFolder, FileIO.DeleteDirectoryOption.DeleteAllContents)
+                        End If
+                    Catch
+                    End Try
+                    Try
+                        If My.Computer.FileSystem.DirectoryExists(DIRCommons) Then
+                            My.Computer.FileSystem.DeleteDirectory(DIRCommons, FileIO.DeleteDirectoryOption.DeleteAllContents)
+                        End If
+                    Catch
+                    End Try
+                    Asistente.Uninstall(False) 'DESINSTALA TODO.
+                Else
+                    'RESTAURA TODO
+                    InstallBackup(True)
+                End If
+            Catch ex As Exception
+                AddToInstallerLog("CriticalError(0)@GeneralUses", "Error: " & ex.Message, True)
+            End Try
             SecureFormClose(StepE, fromForm)
             StepE.SetStatus(theError, 0)
         Catch ex As Exception

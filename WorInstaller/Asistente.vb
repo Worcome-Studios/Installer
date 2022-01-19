@@ -98,9 +98,6 @@ Public Class Asistente
     Private Sub llblUseGuide_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles llblUseGuide.LinkClicked
         Process.Start(ServerSwitch.DIR_AppHelper & "/" & AssemblyName & ".html")
     End Sub
-    Private Sub btnUpdate_Click(sender As Object, e As EventArgs) Handles btnUpdate.Click
-        UpdateIt()
-    End Sub
     Private Sub btnReinstall_Click(sender As Object, e As EventArgs) Handles btnReinstall.Click
         Reinstall()
     End Sub
@@ -136,7 +133,7 @@ Public Class Asistente
             AddToInstallerLog("Reinstall@Asistente", "Error: " & ex.Message, True)
         End Try
     End Sub
-    Sub Uninstall()
+    Sub Uninstall(Optional ByVal NotifyUser As Boolean = True)
         Try
             'Verificar que el software no se este ejecutando
             If IsProccessRunning(IO.Path.GetFileNameWithoutExtension(ExecutableFile)) Then
@@ -145,10 +142,12 @@ Public Class Asistente
                 If isSilenced Then
                     GoTo uninstallthething
                 Else
-                    If MessageBox.Show("¿Want to uninstall '" & AssemblyRegistry.GetValue("Assembly") & "' de su equipo?", "Worcome Security", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
-                        GoTo uninstallthething
-                    Else
-                        Exit Sub
+                    If NotifyUser Then
+                        If MessageBox.Show("¿Want to uninstall '" & AssemblyRegistry.GetValue("Assembly") & "' de su equipo?", "Worcome Security", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                            GoTo uninstallthething
+                        Else
+                            Exit Sub
+                        End If
                     End If
                 End If
 uninstallthething:
@@ -278,15 +277,17 @@ uninstallthething:
                 End Try
                 AddToAssistantLog("Uninstall complete...")
                 If Not isSilenced Then
-                    If AppLanguage = 1 Then
-                        MsgBox("Desinstalación completa", MsgBoxStyle.Information, "Worcome Security")
-                        If MessageBox.Show("¿Quiere completar una pequeña encuesta?" & vbCrLf & "Nos ayudaría mucho saber su opinión", "Worcome Community", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
-                            Process.Start("https://docs.google.com/forms/d/e/1FAIpQLSevAg6CpdzgHV1cK1QvNp41DzXb-Rf379vn9znIOFp1FO-cug/viewform?usp=pp_url&entry.2061732064=" & AssemblyPackageName)
-                        End If
-                    Else
-                        MsgBox("Uninstall Completed", MsgBoxStyle.Information, "Worcome Security")
-                        If MessageBox.Show("Do you want to complete a short survey?" & vbCrLf & "It would help us a lot to know your opinion!", "Worcome Community", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
-                            Process.Start("https://docs.google.com/forms/d/e/1FAIpQLSevAg6CpdzgHV1cK1QvNp41DzXb-Rf379vn9znIOFp1FO-cug/viewform?usp=pp_url&entry.2061732064=" & AssemblyPackageName)
+                    If NotifyUser Then
+                        If AppLanguage = 1 Then
+                            MsgBox("Desinstalación completa", MsgBoxStyle.Information, "Worcome Security")
+                            If MessageBox.Show("¿Quiere completar una pequeña encuesta?" & vbCrLf & "Nos ayudaría mucho saber su opinión", "Worcome Community", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                                Process.Start("https://docs.google.com/forms/d/e/1FAIpQLSevAg6CpdzgHV1cK1QvNp41DzXb-Rf379vn9znIOFp1FO-cug/viewform?usp=pp_url&entry.2061732064=" & AssemblyPackageName)
+                            End If
+                        Else
+                            MsgBox("Uninstall Completed", MsgBoxStyle.Information, "Worcome Security")
+                            If MessageBox.Show("Do you want to complete a short survey?" & vbCrLf & "It would help us a lot to know your opinion!", "Worcome Community", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                                Process.Start("https://docs.google.com/forms/d/e/1FAIpQLSevAg6CpdzgHV1cK1QvNp41DzXb-Rf379vn9znIOFp1FO-cug/viewform?usp=pp_url&entry.2061732064=" & AssemblyPackageName)
+                            End If
                         End If
                     End If
                 End If

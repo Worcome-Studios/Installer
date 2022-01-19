@@ -39,8 +39,6 @@ Partial Class Asistente
         Me.lblReinstall = New System.Windows.Forms.Label()
         Me.lblUninstall = New System.Windows.Forms.Label()
         Me.lblReset = New System.Windows.Forms.Label()
-        Me.btnUpdate = New System.Windows.Forms.Button()
-        Me.lblUpdate = New System.Windows.Forms.Label()
         Me.btnSearchUpdates = New System.Windows.Forms.Button()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.picAppIcon = New System.Windows.Forms.PictureBox()
@@ -215,27 +213,6 @@ Partial Class Asistente
     "e datos, datos del usuario, etc"
         Me.lblReset.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'btnUpdate
-        '
-        Me.btnUpdate.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.btnUpdate.Location = New System.Drawing.Point(17, 109)
-        Me.btnUpdate.Name = "btnUpdate"
-        Me.btnUpdate.Size = New System.Drawing.Size(156, 42)
-        Me.btnUpdate.TabIndex = 4
-        Me.btnUpdate.Text = "Actualizar"
-        Me.btnUpdate.UseVisualStyleBackColor = True
-        Me.btnUpdate.Visible = False
-        '
-        'lblUpdate
-        '
-        Me.lblUpdate.Location = New System.Drawing.Point(179, 109)
-        Me.lblUpdate.Name = "lblUpdate"
-        Me.lblUpdate.Size = New System.Drawing.Size(325, 42)
-        Me.lblUpdate.TabIndex = 21
-        Me.lblUpdate.Text = "Actualizar el programa a su version mas reciente"
-        Me.lblUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.lblUpdate.Visible = False
-        '
         'btnSearchUpdates
         '
         Me.btnSearchUpdates.Cursor = System.Windows.Forms.Cursors.Hand
@@ -252,9 +229,7 @@ Partial Class Asistente
         Me.Panel2.Controls.Add(Me.llblUseGuide)
         Me.Panel2.Controls.Add(Me.lblSearchUpdates)
         Me.Panel2.Controls.Add(Me.llblAbout)
-        Me.Panel2.Controls.Add(Me.btnUpdate)
         Me.Panel2.Controls.Add(Me.btnReinstall)
-        Me.Panel2.Controls.Add(Me.lblUpdate)
         Me.Panel2.Controls.Add(Me.btnSearchUpdates)
         Me.Panel2.Controls.Add(Me.lblReset)
         Me.Panel2.Controls.Add(Me.btnUninstall)
@@ -350,8 +325,6 @@ Partial Class Asistente
     Friend WithEvents lblUninstall As Label
     Friend WithEvents lblReset As Label
     Friend WithEvents rtbLog As RichTextBox
-    Friend WithEvents btnUpdate As Button
-    Friend WithEvents lblUpdate As Label
     Friend WithEvents lblAssemblyInfo As Label
     Friend WithEvents ProgressBar1 As ProgressBar
     Friend WithEvents llblAbout As LinkLabel

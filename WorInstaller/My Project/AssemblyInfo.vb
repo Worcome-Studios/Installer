@@ -10,10 +10,10 @@ Imports System.Runtime.InteropServices
 ' Revisar los valores de los atributos del ensamblado
 
 <Assembly: AssemblyTitle("Worcome Installer")>
-<Assembly: AssemblyDescription("Official Deploy Software")>
+<Assembly: AssemblyDescription("Deploy Software")>
 <Assembly: AssemblyCompany("Worcome Studios")>
-<Assembly: AssemblyProduct("WorInstaller")>
-<Assembly: AssemblyCopyright("")>
+<Assembly: AssemblyProduct("Wor Installer")>
+<Assembly: AssemblyCopyright("Copyright © 2022 Worcome Studios. Todos los derechos reservados.")>
 <Assembly: AssemblyTrademark("Worcome Studios")>
 
 <Assembly: ComVisible(False)>
@@ -32,6 +32,6 @@ Imports System.Runtime.InteropServices
 ' mediante el carácter '*', como se muestra a continuación:
 ' <Assembly: AssemblyVersion("1.0.*")>
 
-<Assembly: AssemblyVersion("4.2.3.0")>
-<Assembly: AssemblyFileVersion("14.12.20.21")>
+<Assembly: AssemblyVersion("4.2.2.0")>
+<Assembly: AssemblyFileVersion("18.01.20.22")>
 <Assembly: NeutralResourcesLanguage("es")>

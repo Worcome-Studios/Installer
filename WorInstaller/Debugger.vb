@@ -2,6 +2,7 @@
 
     Private Sub Debugger_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         InstallerCommand.StartUp()
+        AddToInstallerLog("", "", True)
         AddToInstallerLog("Debugger", "Instancia de WorInstaller iniciada!. " & DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss tt"), True)
         ArgCommandLine = Command()
         Inicializate()
